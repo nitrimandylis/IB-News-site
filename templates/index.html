@@ -42,7 +42,7 @@
             <div class="hero-content">
                 <span class="category-tag">Featured Story</span>
                 <h1>{{ articles[0]['title'] }}</h1>
-                <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'][:10] }}</p>
+                <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'].strftime('%Y-%m-%d') }}</p>
                 <p class="hero-excerpt">{{ articles[0]['content'][:150] }}...</p> {# Show a preview of the content #}
                 <a href="#" class="read-more-btn">Read Full Story &rarr;</a>
             </div>
@@ -60,7 +60,7 @@
                     <div class="card-content">
                         <span class="category-tag">Academics</span> {# Category can be a future DB field #}
                         <h3>{{ article['title'] }}</h3>
-                        <p class="article-meta">By {{ article['author'] }} | {{ article['created_at'][:10] }}</p>
+                        <p class="article-meta">By {{ article['author'] }} | {{ article['created_at'].strftime('%Y-%m-%d') }}</p>
                         <a href="#" class="read-more-link">Read More</a>
                     </div>
                 </div>
