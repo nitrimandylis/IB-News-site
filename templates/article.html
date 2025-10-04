@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The title will be the article's title -->
+    <title>{{ article.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Reading Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <header class="site-header article-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/">CGS IB Gazette</a>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container article-container">
+        <!-- Article content will be dynamically inserted here -->
+        <article class="article-content fade-in">
+            <header class="article-main-header">
+                <h1>{{ article.title }}</h1>
+                <p class="article-meta">By {{ article.author }} | Published on {{ article.created_at.strftime('%B %d, %Y') }}</p>
+            </header>
+            
+            <div class="article-body">
+                <!-- The |safe filter allows rendering HTML content if you add a rich text editor later -->
+                {{ article.content | safe }}
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer-bottom">
+        <div class="container">
+            <div class="footer-copyright">
+                <p>&copy; 2025 CGS IB Gazette. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Link to the new JavaScript file -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

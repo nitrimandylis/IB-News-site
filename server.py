@@ -55,6 +55,28 @@ def index():
 
     return render_template('index.html', articles=articles_dict)
 
+@app.route('/article/<int:article_id>')
+def article(article_id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM articles WHERE id = %s', (article_id,))
+    article_data = cur.fetchone()
+    cur.close()
+
+    if article_data is None:
+        return "Article not found", 404
+
+    article_dict = {
+        'id': article_data[0],
+        'title': article_data[1],
+        'author': article_data[2],
+        'content': article_data[3],
+        'created_at': article_data[4]
+    }
+
+    return render_template('article.html', article=article_dict)
+
+
 # --- Admin Routes ---
 
 @app.route('/admin')

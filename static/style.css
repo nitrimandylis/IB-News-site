@@ -336,3 +336,63 @@ a:hover {
         font-size: 2.2rem;
     }
 }
+
+/* --- Article View Styles --- */
+.article-header {
+    box-shadow: none;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.article-container {
+    max-width: 800px; /* Optimal width for reading */
+    padding-top: 2rem;
+}
+
+.article-main-header {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+}
+
+.article-main-header h1 {
+    font-size: 3rem;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.article-body {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #343a40;
+}
+
+.article-body p {
+    margin-bottom: 1.5rem;
+}
+
+/* --- Reading Progress Bar --- */
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background: #f8f9fa;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--primary-color);
+    width: 0%;
+}
+
+/* --- Fade-in Animation --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+}
