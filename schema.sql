@@ -1,9 +1,9 @@
 -- Drop the table if it already exists to ensure a clean slate.
 DROP TABLE IF EXISTS articles;
 
--- Create the main table for our articles.
+-- Create the main table for our articles, using PostgreSQL syntax.
 CREATE TABLE articles (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     author TEXT NOT NULL,
     content TEXT NOT NULL,

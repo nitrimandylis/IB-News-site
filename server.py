@@ -1,21 +1,22 @@
-import sqlite3
+import os
+import psycopg2
 from flask import Flask, render_template, g
 
 # --- Basic App Setup ---
 app = Flask(__name__)
-DATABASE = 'database.db'
 
 # --- Database Connection Functions ---
+
 def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-        db.row_factory = sqlite3.Row
-    return db
+    # Get the database connection URL from the environment variable set in Render
+    DATABASE_URL = os.environ['DATABASE_URL']
+    if 'db' not in g:
+        g.db = psycopg2.connect(DATABASE_URL)
+    return g.db
 
 @app.teardown_appcontext
 def close_connection(exception):
-    db = getattr(g, '_database', None)
+    db = g.pop('db', None)
     if db is not None:
         db.close()
 
@@ -23,11 +24,25 @@ def close_connection(exception):
 
 @app.route('/')
 def index():
-    db = get_db()
+    conn = get_db()
+    cur = conn.cursor()
     # Fetch all articles, ordered by the newest first
-    articles = db.execute('SELECT * FROM articles ORDER BY created_at DESC').fetchall()
-    # Pass the articles to the template
-    return render_template('index.html', articles=articles)
+    cur.execute('SELECT * FROM articles ORDER BY created_at DESC;')
+    articles = cur.fetchall()
+    cur.close()
+    
+    # Convert list of tuples to list of dictionaries for easier template access
+    articles_dict = []
+    for article in articles:
+        articles_dict.append({
+            'id': article[0],
+            'title': article[1],
+            'author': article[2],
+            'content': article[3],
+            'created_at': article[4]
+        })
+
+    return render_template('index.html', articles=articles_dict)
 
 # --- Main Execution ---
 

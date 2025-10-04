@@ -1,13 +1,24 @@
-import sqlite3
+import os
+import psycopg2
 
-# This script will initialize our database
+# Get the database connection URL from the environment variable
+DATABASE_URL = os.environ['DATABASE_URL']
 
-connection = sqlite3.connect('database.db')
+# Connect to the database
+conn = psycopg2.connect(DATABASE_URL)
 
-with open('schema.sql') as f:
-    connection.executescript(f.read())
+# Open a cursor to perform database operations
+cur = conn.cursor()
 
-connection.commit()
-connection.close()
+# Execute the schema.sql file to create the tables and insert data
+with open('schema.sql', 'r') as f:
+    cur.execute(f.read())
 
-print("Database 'database.db' initialized successfully.")
+# Make the changes to the database persistent
+conn.commit()
+
+# Close the cursor and connection
+cur.close()
+conn.close()
+
+print("Database initialized successfully using PostgreSQL.")
