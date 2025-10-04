@@ -1,0 +1,338 @@
+/* --- CSS Variables (Inspired by Investopedia) --- */
+:root {
+    --primary-color: #007bff; /* A strong, clean blue */
+    --dark-blue: #004a99;
+    --text-color: #333;
+    --secondary-text-color: #555;
+    --border-color: #e0e0e0;
+    --background-color: #ffffff;
+    --light-gray-bg: #f8f9fa;
+    --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --heading-font-family: 'Georgia', 'Times New Roman', Times, serif;
+}
+
+/* --- General Styles --- */
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+h1, h2, h3 {
+    font-family: var(--heading-font-family);
+    font-weight: 700;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--dark-blue);
+}
+
+/* --- Header --- */
+.site-header {
+    background: var(--background-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #000;
+    font-family: var(--heading-font-family);
+}
+
+.main-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+}
+
+.main-nav li {
+    margin-left: 2rem;
+}
+
+.main-nav a {
+    color: var(--text-color);
+    font-weight: 600;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+}
+
+.main-nav a:hover {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.search-bar {
+    display: flex;
+}
+
+.search-bar input {
+    border: 1px solid var(--border-color);
+    padding: 0.5rem;
+    border-radius: 5px 0 0 5px;
+    font-size: 1rem;
+}
+
+.search-bar button {
+    border: 1px solid var(--primary-color);
+    background: var(--primary-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hero-image-placeholder {
+    width: 100%;
+    height: 350px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+
+.hero-content h1 {
+    font-size: 2.8rem;
+    margin: 0.5rem 0;
+    line-height: 1.2;
+}
+
+.category-tag {
+    font-weight: bold;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.article-meta {
+    color: var(--secondary-text-color);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.hero-excerpt {
+    font-size: 1.1rem;
+    color: var(--secondary-text-color);
+}
+
+.read-more-btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+/* --- Article Grid Section --- */
+.article-grid-section {
+    padding: 3rem 0;
+}
+
+.article-grid-section h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.article-card {
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card-image-placeholder {
+    width: 100%;
+    height: 180px;
+    background-color: #e9ecef;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-content h3 {
+    margin: 0.5rem 0;
+    font-size: 1.4rem;
+    line-height: 1.3;
+}
+
+.read-more-link {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* --- Featured Video Section --- */
+.featured-video-section {
+    padding: 3rem 0;
+    background-color: var(--light-gray-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+.featured-video-section h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.video-wrapper {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+
+.video-placeholder {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    background-color: #333;
+    position: relative;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.video-placeholder .fa-play-circle {
+    font-size: 5rem;
+    opacity: 0.7;
+}
+
+.video-caption {
+    margin-top: 1rem;
+}
+
+.video-caption h3 {
+    font-size: 1.5rem;
+}
+
+/* --- Footer --- */
+.site-footer-bottom {
+    background: #222;
+    color: #ccc;
+    padding: 3rem 0 1rem 0;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-column h4 {
+    font-family: var(--font-family);
+    color: #fff;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-column a {
+    color: #ccc;
+}
+
+.footer-column a:hover {
+    color: #fff;
+}
+
+.social-icons a {
+    color: #ccc;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.footer-copyright {
+    text-align: center;
+    border-top: 1px solid #444;
+    padding-top: 1rem;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* --- Responsive --- */
+@media(max-width: 992px) {
+    .header-content {
+        flex-direction: column;
+    }
+    .main-nav {
+        margin-top: 1rem;
+    }
+    .hero-section {
+        grid-template-columns: 1fr;
+    }
+    .hero-image-placeholder {
+        height: 300px;
+    }
+}
+
+@media(max-width: 768px) {
+    .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    .main-nav li {
+        margin: 0.5rem 0;
+    }
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+}

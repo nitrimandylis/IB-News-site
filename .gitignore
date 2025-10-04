@@ -1,0 +1,25 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+env/
+venv/
+*.venv
+
+# Database files
+*.db
+*.sqlite3
+
+# Instance folder (for secrets)
+instance/
+
+# IDE / Editor specific
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
