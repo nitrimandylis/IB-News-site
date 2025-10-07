@@ -23,19 +23,21 @@ empty = cur.fetchone()[0] == 0
 if empty:
     print("Table 'articles' was empty, inserting initial data.")
     cur.execute(
-        "INSERT INTO articles (title, author, content) VALUES (%s, %s, %s)",
+        "INSERT INTO articles (title, author, content, image_url) VALUES (%s, %s, %s, %s)",
         (
             'Welcome to the New Gazette!', 
             'The Editors', 
-            'This is the very first article on our new, dynamic website platform. More content to come!'
+            'This is the very first article on our new, dynamic website platform. More content to come!',
+            'https://images.unsplash.com/photo-1585241936939-be4099591252?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
         )
     )
     cur.execute(
-        "INSERT INTO articles (title, author, content) VALUES (%s, %s, %s)",
+        "INSERT INTO articles (title, author, content, image_url) VALUES (%s, %s, %s, %s)",
         (
             'A Guide to the Extended Essay', 
             'Jane Doe', 
-            'The Extended Essay can be a daunting task, but with the right approach, it can be a rewarding experience. Here are our top tips for success.'
+            'The Extended Essay can be a daunting task, but with the right approach, it can be a rewarding experience. Here are our top tips for success.',
+            'https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
         )
     )
 else:

@@ -50,7 +50,8 @@ def index():
             'title': article[1],
             'author': article[2],
             'content': article[3],
-            'created_at': article[4]
+            'image_url': article[4],
+            'created_at': article[5]
         })
 
     return render_template('index.html', articles=articles_dict)
@@ -71,7 +72,8 @@ def article(article_id):
         'title': article_data[1],
         'author': article_data[2],
         'content': article_data[3],
-        'created_at': article_data[4]
+        'image_url': article_data[4],
+        'created_at': article_data[5]
     }
 
     return render_template('article.html', article=article_dict)
@@ -90,13 +92,14 @@ def add_article():
     title = request.form['title']
     author = request.form['author']
     content = request.form['content']
+    image_url = request.form['image_url']
     
     conn = get_db()
     cur = conn.cursor()
     # Use parameterized query to prevent SQL injection
     cur.execute(
-        'INSERT INTO articles (title, author, content) VALUES (%s, %s, %s)',
-        (title, author, content)
+        'INSERT INTO articles (title, author, content, image_url) VALUES (%s, %s, %s, %s)',
+        (title, author, content, image_url)
     )
     conn.commit()
     cur.close()

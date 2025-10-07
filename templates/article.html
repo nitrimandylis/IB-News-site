@@ -36,6 +36,10 @@
                 <h1>{{ article.title }}</h1>
                 <p class="article-meta">By {{ article.author }} | Published on {{ article.created_at.strftime('%B %d, %Y') }}</p>
             </header>
+
+            {% if article.image_url %}
+            <div class="article-header-image" style="background-image: url('{{ article.image_url }}');"></div>
+            {% endif %}
             
             <div class="article-body">
                 <!-- The |safe filter allows rendering HTML content if you add a rich text editor later -->

@@ -4,5 +4,6 @@ CREATE TABLE IF NOT EXISTS articles (
     title TEXT NOT NULL,
     author TEXT NOT NULL,
     content TEXT NOT NULL,
+    image_url TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
