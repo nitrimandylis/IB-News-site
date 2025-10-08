@@ -39,7 +39,7 @@ def close_connection(exception):
 def index():
     conn = get_db()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM articles ORDER BY created_at DESC;')
+    cur.execute('SELECT id, title, author, content, image_url, created_at FROM articles ORDER BY created_at DESC;')
     articles = cur.fetchall()
     cur.close()
     
@@ -60,7 +60,7 @@ def index():
 def article(article_id):
     conn = get_db()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM articles WHERE id = %s', (article_id,))
+    cur.execute('SELECT id, title, author, content, image_url, created_at FROM articles WHERE id = %s', (article_id,))
     article_data = cur.fetchone()
     cur.close()
 

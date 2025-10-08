@@ -14,6 +14,22 @@ cur = conn.cursor()
 with open('schema.sql', 'r') as f:
     cur.execute(f.read())
 
+# Idempotently add the 'created_at' column if it doesn't exist
+cur.execute("""
+    SELECT column_name 
+    FROM information_schema.columns 
+    WHERE table_name='articles' AND column_name='created_at';
+""")
+if cur.fetchone() is None:
+    print("Column 'created_at' not found in 'articles' table. Adding it now.")
+    cur.execute("""
+        ALTER TABLE articles 
+        ADD COLUMN created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+    """)
+    print("Column 'created_at' added successfully.")
+else:
+    print("Column 'created_at' already exists in 'articles' table.")
+
 # Check if the table is empty
 cur.execute("SELECT COUNT(id) FROM articles")
 # fetchone() returns a tuple, e.g., (0,)
