@@ -1,125 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CGS IB Gazette</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+<!-- Hero Section - Displays the most recent article -->
+{% if articles %}
+<section class="hero-section">
+    <div class="hero-image-placeholder" style="background-image: url('{{ articles[0]['image_url'] }}');"></div>
+    <div class="hero-content">
+        <span class="category-tag">Featured Story</span>
+        <h1>{{ articles[0]['title'] }}</h1>
+        <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'].strftime('%Y-%m-%d') }}</p>
+        <p class="hero-excerpt">{{ articles[0]['content'][:150] }}...</p> {# Show a preview of the content #}
+        <a href="{{ url_for('article', article_id=articles[0]['id']) }}" class="read-more-btn">Read Full Story &rarr;</a>
+    </div>
+</section>
+{% endif %}
 
-    <header class="site-header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="/">CGS IB Gazette</a>
-                </div>
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="#articles">Articles</a></li>
-                        <li><a href="#videos">Videos</a></li>
-                        <li><a href="#photo-essays">Photo Essays</a></li>
-                        <li><a href="#student-life">Student Life</a></li>
-                        <li><a href="#about">About</a></li>
-                    </ul>
-                </nav>
-                <div class="header-actions">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search...">
-                        <button><i class="fa fa-search"></i></button>
-                    </div>
-                </div>
+<!-- Latest Articles Grid -->
+<section id="articles" class="article-grid-section">
+    <h2>Latest Articles</h2>
+    <div class="article-grid">
+        <!-- Loop through articles, skipping the first one which is in the hero -->
+        {% for article in articles[1:] %}
+        <div class="article-card">
+            <div class="card-image-placeholder" style="background-image: url('{{ article['image_url'] }}');"></div>
+            <div class="card-content">
+                <span class="category-tag">Academics</span> {# Category can be a future DB field #}
+                <h3>{{ article['title'] }}</h3>
+                <p class="article-meta">By {{ article['author'] }} | {{ article['created_at'].strftime('%Y-%m-%d') }}</p>
+                <a href="{{ url_for('article', article_id=article['id']) }}" class="read-more-link">Read More</a>
             </div>
         </div>
-    </header>
+        {% else %}
+        <p>No articles found. Check back later!</p>
+        {% endfor %}
+    </div>
+</section>
 
-    <main class="container">
-        <!-- Hero Section - Displays the most recent article -->
-        {% if articles %}
-        <section class="hero-section">
-            <div class="hero-image-placeholder" style="background-image: url('{{ articles[0]['image_url'] }}');"></div>
-            <div class="hero-content">
-                <span class="category-tag">Featured Story</span>
-                <h1>{{ articles[0]['title'] }}</h1>
-                <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'].strftime('%Y-%m-%d') }}</p>
-                <p class="hero-excerpt">{{ articles[0]['content'][:150] }}...</p> {# Show a preview of the content #}
-                <a href="{{ url_for('article', article_id=articles[0]['id']) }}" class="read-more-btn">Read Full Story &rarr;</a>
-            </div>
-        </section>
-        {% endif %}
-
-        <!-- Latest Articles Grid -->
-        <section id="articles" class="article-grid-section">
-            <h2>Latest Articles</h2>
-            <div class="article-grid">
-                <!-- Loop through articles, skipping the first one which is in the hero -->
-                {% for article in articles[1:] %}
-                <div class="article-card">
-                    <div class="card-image-placeholder" style="background-image: url('{{ article['image_url'] }}');"></div>
-                    <div class="card-content">
-                        <span class="category-tag">Academics</span> {# Category can be a future DB field #}
-                        <h3>{{ article['title'] }}</h3>
-                        <p class="article-meta">By {{ article['author'] }} | {{ article['created_at'].strftime('%Y-%m-%d') }}</p>
-                        <a href="{{ url_for('article', article_id=article['id']) }}" class="read-more-link">Read More</a>
-                    </div>
-                </div>
-                {% else %}
-                <p>No articles found. Check back later!</p>
-                {% endfor %}
-            </div>
-        </section>
-
-        <!-- Featured Video Section (remains static for now) -->
-        <section id="videos" class="featured-video-section">
-            <h2>Featured Video</h2>
-            <div class="video-wrapper">
-                <div class="video-placeholder">
-                    <i class="fa fa-play-circle"></i>
-                </div>
-                <div class="video-caption">
-                    <h3>A Day in the Life of an IB Student</h3>
-                    <p>Experience the hustle, challenges, and triumphs of a typical day in the IB Diploma Programme.</p>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="site-footer-bottom">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-column">
-                    <h4>CGS IB Gazette</h4>
-                    <p>The student voice of the International Baccalaureate Programme.</p>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#articles">Articles</a></li>
-                        <li><a href="#videos">Videos</a></li>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#">Submission Guidelines</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Us</h4>
-                    <p>Email: <a href="mailto:gazette@cgs.example.com">gazette@cgs.example.com</a></p>
-                </div>
-                <div class="footer-column">
-                    <h4>Follow Us</h4>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-copyright">
-                <p>&copy; 2025 CGS IB Gazette. All Rights Reserved.</p>
-            </div>
+<!-- Featured Video Section (remains static for now) -->
+<section id="videos" class="featured-video-section">
+    <h2>Featured Video</h2>
+    <div class="video-wrapper">
+        <div class="video-placeholder">
+            <i class="fa fa-play-circle"></i>
         </div>
-    </footer>
-
-</body>
-</html>
+        <div class="video-caption">
+            <h3>A Day in the Life of an IB Student</h3>
+            <p>Experience the hustle, challenges, and triumphs of a typical day in the IB Diploma Programme.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

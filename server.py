@@ -1,24 +1,17 @@
 import os
 import psycopg2
-from flask import Flask, render_template, g, request, redirect, url_for
-from flask_httpauth import HTTPBasicAuth
+from flask import Flask, render_template, g, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # --- Basic App Setup ---
 app = Flask(__name__)
-auth = HTTPBasicAuth()
+app.secret_key = os.urandom(24)
 
 # --- User Authentication ---
 # In a real app, you'd store this in a database or a more secure config.
 users = {
     "admin": generate_password_hash("password")
 }
-
-@auth.verify_password
-def verify_password(username, password):
-    if username in users and \
-            check_password_hash(users.get(username), password):
-        return username
 
 # --- Database Connection Functions ---
 def get_db():
@@ -78,17 +71,62 @@ def article(article_id):
 
     return render_template('article.html', article=article_dict)
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/profile')
+def profile():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('profile.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username in users:
+            return "Username already taken", 400
+        users[username] = generate_password_hash(password)
+        session['user'] = username
+        return redirect(url_for('profile'))
+    return render_template('register.html')
+
 
 # --- Admin Routes ---
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username in users and check_password_hash(users.get(username), password):
+            session['user'] = username
+            return redirect(url_for('admin'))
+        else:
+            return "Invalid credentials", 401
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('index'))
+
 @app.route('/admin')
-@auth.login_required
 def admin():
+    if 'user' not in session:
+        return redirect(url_for('login'))
     return render_template('admin.html')
 
 @app.route('/admin/add', methods=['POST'])
-@auth.login_required
 def add_article():
+    if 'user' not in session:
+        return redirect(url_for('login'))
     title = request.form['title']
     author = request.form['author']
     content = request.form['content']
