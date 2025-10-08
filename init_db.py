@@ -14,6 +14,19 @@ cur = conn.cursor()
 with open('schema.sql', 'r') as f:
     cur.execute(f.read())
 
+# Idempotently add the 'image_url' column if it doesn't exist
+cur.execute("""
+    SELECT column_name 
+    FROM information_schema.columns 
+    WHERE table_name='articles' AND column_name='image_url';
+""")
+if cur.fetchone() is None:
+    print("Column 'image_url' not found in 'articles' table. Adding it now.")
+    cur.execute("ALTER TABLE articles ADD COLUMN image_url TEXT;")
+    print("Column 'image_url' added successfully.")
+else:
+    print("Column 'image_url' already exists in 'articles' table.")
+
 # Idempotently add the 'created_at' column if it doesn't exist
 cur.execute("""
     SELECT column_name 
