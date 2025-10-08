@@ -79,25 +79,6 @@ def about():
 def contact():
     return render_template('contact.html')
 
-@app.route('/profile')
-def profile():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    return render_template('profile.html')
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if username in users:
-            return "Username already taken", 400
-        users[username] = generate_password_hash(password)
-        session['user'] = username
-        return redirect(url_for('profile'))
-    return render_template('register.html')
-
-
 # --- Admin Routes ---
 
 @app.route('/login', methods=['GET', 'POST'])
