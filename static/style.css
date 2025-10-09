@@ -300,17 +300,16 @@ a:hover {
 }
 
 #burger-menu {
-	background-color: red;
-	cursor: pointer;
-	height: 27px;
-	width: 27px;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-	overflow: visible;
-	z-index: 1002;
-    display: block; /* Hidden by default */
+    display: block !important;
+    width: 50px !important;
+    height: 50px !important;
+    background-color: red !important;
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 9999 !important;
 }
+
 
 #burger-menu span,
 #burger-menu span:before,
@@ -335,10 +334,12 @@ a:hover {
 }
 
 #burger-menu span {
-	right: 0px;
-	top: 13px;
-	width: 27px;
-	background: yellow;
+    display: block !important;
+    width: 100% !important;
+    height: 5px !important;
+    background-color: yellow !important;
+    position: relative !important;
+    top: 50% !important;
 }
 
 #burger-menu span:after {
