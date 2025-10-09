@@ -266,7 +266,8 @@ a:hover {
 /* --- Responsive --- */
 @media(max-width: 992px) {
     .header-content {
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-between;
     }
     .main-nav {
         margin-top: 1rem;
@@ -302,9 +303,10 @@ a:hover {
 	cursor: pointer;
 	height: 27px;
 	width: 27px;
-	margin: 20px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
 	overflow: visible;
-	position: relative;
 	z-index: 1002;
     display: none; /* Hidden by default */
 }
