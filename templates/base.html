@@ -29,6 +29,24 @@
                         {% endif %}
                     </ul>
                 </nav>
+                <div id="burger-menu">
+                    <span></span>
+                </div>
+
+                <div id="menu">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        {% if session['user'] %}
+                        <li><a href="{{ url_for('admin') }}" class="button">Post Article</a></li>
+                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('login') }}" class="button">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
             </div>
         </div>
     </header>
