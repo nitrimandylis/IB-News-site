@@ -22,19 +22,13 @@
                         <li><a href="/about">About</a></li>
                         <li><a href="/contact">Contact</a></li>
                         {% if session['user'] %}
-                        <li><a href="{{ url_for('admin') }}">Post Article</a></li>
+                        <li><a href="{{ url_for('admin') }}" class="button">Post Article</a></li>
                         <li><a href="{{ url_for('logout') }}">Logout</a></li>
                         {% else %}
-                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a href="{{ url_for('login') }}" class="button">Login</a></li>
                         {% endif %}
                     </ul>
                 </nav>
-                <div class="header-actions">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search...">
-                        <button><i class="fa fa-search"></i></button>
-                    </div>
-                </div>
             </div>
         </div>
     </header>
@@ -46,32 +40,6 @@
 
     <footer class="site-footer-bottom">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-column">
-                    <h4>CGS IB Gazette</h4>
-                    <p>The student voice of the International Baccalaureate Programme.</p>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="#">Submission Guidelines</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Us</h4>
-                    <p>Email: <a href="mailto:gazette@cgs.example.com">gazette@cgs.example.com</a></p>
-                </div>
-                <div class="footer-column">
-                    <h4>Follow Us</h4>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
             <div class="footer-copyright">
                 <p>&copy; 2025 CGS IB Gazette. All Rights Reserved.</p>
             </div>
