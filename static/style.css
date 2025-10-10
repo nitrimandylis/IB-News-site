@@ -404,7 +404,7 @@ a:hover {
     transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.28s ease;
     position: fixed;
     top: 50%;
-    left: 45%;
+    left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1001; /* above backdrop */
     display: flex;
@@ -424,12 +424,12 @@ a:hover {
 }
 
 #menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: inline-block;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
+
 
 #menu li {
     margin: 20px 0;
