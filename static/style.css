@@ -445,7 +445,7 @@ body.menu-open {
         display: block;
     }
 
-    .main-nav {
+    .header-content .main-nav {
         display: none !important;
     }
 }
