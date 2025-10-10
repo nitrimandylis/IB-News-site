@@ -409,6 +409,7 @@ a:hover {
     z-index: 1001; /* above backdrop */
     display: flex;
     flex-direction: column;
+    text-align: center;
     align-items: center;
     justify-content: center;
     background: transparent; /* so we only see the links */
