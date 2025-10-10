@@ -299,100 +299,129 @@ a:hover {
     }
 }
 
-/* Burger Menu */
+/* ---------- Burger (plain CSS version, black lines) ---------- */
 #burger-menu {
-    display: none; /* default hidden on desktop */
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 35px;
-    height: 30px;
-    cursor: pointer;
-    z-index: 1002;
+  display: none; /* hidden on desktop, shown on smaller screens via media query */
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 35px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 1003; /* above header (header is 1000) */
+  background: transparent;
+  border: 0;
 }
 
-/* The bars */
+/* bars */
 #burger-menu span,
 #burger-menu span::before,
 #burger-menu span::after {
-    display: block;
-    position: absolute;
-    height: 4px;
-    width: 100%;
-    background-color: #333;
-    border-radius: 2px;
-    transition: all 0.3s ease-in-out;
+  display: block;
+  position: absolute;
+  height: 4px;
+  width: 100%;
+  background-color: #111; /* black-ish lines */
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+  left: 0;
 }
 
+/* middle bar centered vertically */
 #burger-menu span {
-    top: 50%;
-    transform: translateY(-50%);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
+/* top and bottom pseudo bars */
 #burger-menu span::before {
-    content: '';
-    top: -10px;
+  content: '';
+  top: -10px;
 }
-
 #burger-menu span::after {
-    content: '';
-    top: 10px;
+  content: '';
+  top: 10px;
 }
 
-/* Open state */
+/* Open state (JS should toggle 'open' on #burger-menu) */
 #burger-menu.open span {
-    background-color: transparent;
+  background-color: transparent;
 }
-
 #burger-menu.open span::before {
-    transform: rotate(45deg);
-    top: 0;
+  transform: rotate(45deg);
+  top: 0;
 }
-
 #burger-menu.open span::after {
-    transform: rotate(-45deg);
-    top: 0;
+  transform: rotate(-45deg);
+  top: 0;
 }
 
-/* Overlay menu */
+/* Compatibility: if some code toggles 'close' like your original SCSS, support it too */
+#burger-menu.close span {
+  background-color: transparent;
+}
+#burger-menu.close span::before {
+  top: 0;
+  transform: rotate(90deg);
+  width: 100%;
+}
+#burger-menu.close span::after {
+  top: 0;
+  left: 0;
+  transform: rotate(90deg);
+  opacity: 0;
+  width: 0;
+}
+
+/* ---------- Overlay menu ---------- */
 #menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255,255,255,0.98);
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.3s ease-in-out;
-    z-index: 1001;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0); /* start transparent; visible state will use dark overlay */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, background 0.3s ease-in-out;
+  z-index: 1002; /* below burger but above page content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  pointer-events: none; /* prevent interaction when hidden */
 }
 
-#menu.show {
-    visibility: visible;
-    opacity: 1;
+/* visible state: support 'show' (preferred) and 'overlay' (compat) */
+#menu.show,
+#menu.overlay {
+  visibility: visible;
+  opacity: 1;
+  background: rgba(0,0,0,0.5); /* dark overlay so it's obvious */
+  pointer-events: auto;
+  padding-top: 100px;
 }
 
+/* menu content */
 #menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-align: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
 }
-
 #menu li {
-    margin: 20px 0;
+  margin: 20px 0;
+}
+#menu a {
+  font-size: 24px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
 }
 
-#menu a {
-    font-size: 24px;
-    font-weight: 600;
-    text-decoration: none;
-    color: #111;
+/* lock body scroll when menu open */
+body.menu-open {
+  overflow: hidden;
 }
 
 /* Responsive: show burger on mobile */
@@ -406,6 +435,7 @@ a:hover {
     }
 }
 
+/* ---------- End burger/menu ---------- */
 
 @media(max-width: 576px) {
     .header-content {
