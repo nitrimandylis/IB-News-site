@@ -16,7 +16,7 @@
                 <div class="logo">
                     <a href="/">CGS IB Gazette</a>
                 </div>
-                <nav class="main-nav">
+                <nav class="main-nav" role="navigation" aria-label="Primary">
                     <ul>
                         <li><a href="/">Home</a></li>
                         <li><a href="/about">About</a></li>
@@ -29,18 +29,18 @@
                         {% endif %}
                     </ul>
                 </nav>
-                <div id="burger-menu">
-                    <span></span>
-                </div>
+                <button id="burger-menu" class="burger-button" aria-controls="menu" aria-expanded="false" aria-label="Open menu">
+                    <span aria-hidden="true"></span>
+                </button>
             </div>
         </div>
     </header>
 
     <!-- MOBILE MENU BACKDROP -->
-    <div id="menu-backdrop"></div>
+    <div id="menu-backdrop" class="menu-backdrop" aria-hidden="true"></div>
 
     <!-- MOBILE MENU -->
-    <div id="menu">
+    <div id="menu" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
