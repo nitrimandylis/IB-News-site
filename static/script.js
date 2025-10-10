@@ -13,19 +13,36 @@ document.addEventListener("DOMContentLoaded", function() {
   // === Burger Menu Toggle ===
   const burgerMenu = document.getElementById('burger-menu');
   const overlay = document.getElementById('menu');
+  const backdrop = document.getElementById('menu-backdrop');
 
-  if (!burgerMenu || !overlay) {
-    console.warn("Burger menu or overlay not found in DOM.");
+  if (!burgerMenu || !overlay || !backdrop) {
+    console.warn("Burger menu, overlay, or backdrop not found in DOM.");
     return;
   }
 
-  burgerMenu.addEventListener('click', function() {
-    // NOTE: CSS expects .open on #burger-menu and .show on #menu
-    this.classList.toggle('open');
-    overlay.classList.toggle('show');
+  function openMenu() {
+    burgerMenu.classList.add('open');
+    overlay.classList.add('show');
+    backdrop.style.visibility = 'visible';
+    backdrop.style.opacity = '1';
+    document.body.classList.add('menu-open'); // optional: prevent scrolling
+  }
 
-    // optional: prevent body scroll while menu is open
-    document.body.classList.toggle('menu-open');
+  function closeMenu() {
+    burgerMenu.classList.remove('open');
+    overlay.classList.remove('show');
+    backdrop.style.opacity = '0';
+    setTimeout(() => backdrop.style.visibility = 'hidden', 300); // match CSS transition
+    document.body.classList.remove('menu-open');
+  }
+
+  burgerMenu.addEventListener('click', function() {
+    if (overlay.classList.contains('show')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   });
 
+  backdrop.addEventListener('click', closeMenu);
 });
