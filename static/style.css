@@ -374,69 +374,69 @@ a:hover {
 }
 
 /* ---------- Overlay menu ---------- */
+/* Backdrop / overlay effect */
 .menu-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
-    backdrop-filter: blur(10px); /* Apply blur effect */
-    z-index: 999; /* Ensure it's behind the menu */
-    visibility: hidden; /* Initially hidden */
+    background: rgba(0,0,0,0.7); /* dark semi-transparent */
+    backdrop-filter: blur(8px);   /* blur the content behind */
     opacity: 0;
-    transition: opacity 0.3s ease;
+    visibility: hidden;
+    z-index: 1000;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+/* When menu is open */
+.menu-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Menu styling to be on top of backdrop */
 #menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,0); /* start transparent; visible state will use dark overlay */
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, background 0.3s ease-in-out;
-  z-index: 1002; /* below burger but above page content */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  pointer-events: none; /* prevent interaction when hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001; /* above backdrop */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent; /* so we only see the links */
 }
 
-/* visible state: support 'show' (preferred) and 'overlay' (compat) */
-#menu.show,
-#menu.overlay {
-  visibility: visible;
-  opacity: 1;
-  background: rgba(0,0,0,0.5); /* dark overlay so it's obvious */
-  pointer-events: auto;
-  padding-top: 100px;
-}
-
-/* menu content */
 #menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-}
-#menu li {
-  margin: 20px 0;
-}
-#menu a {
-  font-size: 24px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #fff;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
 }
 
-/* lock body scroll when menu open */
-body.menu-open {
-  overflow: hidden;
+#menu li {
+    margin: 20px 0;
 }
+
+#menu a {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+#menu a:hover {
+    color: var(--primary-color);
+}
+
+/* Optional: hide scroll when menu open */
+body.menu-open {
+    overflow: hidden;
+}
+
 
 /* Responsive: show burger on mobile */
 @media (max-width: 768px) {
