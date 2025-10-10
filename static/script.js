@@ -15,20 +15,13 @@ function updateProgressBar() {
 // Add event listener for scroll events
 document.addEventListener('scroll', updateProgressBar);
 
-var burgerMenu = document.getElementById('burger-menu');
+document.addEventListener("DOMContentLoaded", function() {
+  var burgerMenu = document.getElementById('burger-menu');
+  var overlay = document.getElementById('menu');
 
-var overlay = document.getElementById('menu');
-
-burgerMenu.addEventListener('click', function() {
-  this.classList.toggle("close");
-  overlay.classList.toggle("overlay");
+  burgerMenu.addEventListener('click', function() {
+    this.classList.toggle("close");
+    overlay.classList.toggle("overlay");
+  });
 });
 
-var burgerMenu = document.getElementById('burger-menu');
-
-var overlay = document.getElementById('menu');
-
-burgerMenu.addEventListener('click', function() {
-  this.classList.toggle("close");
-  overlay.classList.toggle("overlay");
-});
