@@ -408,8 +408,7 @@ a:hover {
 }
 
 /* Open state (JS should toggle 'open' on #burger-menu) */
-#burger-menu.open span,
-#burger-menu.close span {
+#burger-menu.open span {
     background-color: transparent;
 }
 
@@ -421,6 +420,11 @@ a:hover {
 #burger-menu.open span::after {
     transform: rotate(-45deg);
     top: 0;
+}
+
+/* Compatibility: if some code toggles 'close' like your original SCSS, support it too */
+#burger-menu.close span {
+    background-color: transparent;
 }
 
 #burger-menu.close span::before {
@@ -516,6 +520,21 @@ a:hover {
 
 #menu a:hover {
     color: var(--primary-color);
+}
+
+/* Responsive: show burger on mobile */
+@media (max-width: 768px) {
+    #burger-menu {
+        display: block;
+    }
+
+    .header-content .main-nav {
+        display: none !important;
+    }
+
+    #menu .main-nav {
+        display: flex !important;
+    }
 }
 
 /* Optional: hide scroll when menu open */
