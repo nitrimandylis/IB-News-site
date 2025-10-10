@@ -397,39 +397,41 @@ a:hover {
 
 /* Menu styling to be on top of backdrop */
 #menu {
-  position: fixed;
-  inset: 0;                     /* top:0; right:0; bottom:0; left:0; */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;                /* above backdrop (1000) */
-  pointer-events: none;         /* disable clicks while hidden */
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0.98);       /* subtle scale for animation */
-  transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.28s ease;
-  background: transparent;      /* keep background transparent so backdrop shows */
+    visibility: hidden;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001; /* above backdrop */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent; /* so we only see the links */
 }
 
-/* Visible state */
-#menu.show {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: scale(1);
+#menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
 }
 
-/* menu links styling (keeps same visual) */
-#menu ul { list-style: none; padding: 0; margin: 0; text-align: center; }
-#menu li { margin: 20px 0; }
+#menu li {
+    margin: 20px 0;
+}
+
 #menu a {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.2s ease, transform 0.18s ease;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
 }
-#menu a:hover { color: var(--primary-color); transform: translateY(-3px); }
+
+#menu a:hover {
+    color: var(--primary-color);
+}
 
 /* Optional: hide scroll when menu open */
 body.menu-open {
