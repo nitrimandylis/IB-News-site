@@ -424,15 +424,17 @@ a:hover {
 }
 
 #menu ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    text-align: center;
     justify-content: center;
 }
 
-
 #menu li {
     margin: 20px 0;
+    text-align: center;
 }
 
 #menu a {
