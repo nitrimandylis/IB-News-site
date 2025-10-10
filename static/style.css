@@ -396,18 +396,31 @@ a:hover {
 }
 
 /* Menu styling to be on top of backdrop */
+/* MINIMAL CHANGES: ensure hidden by default and visible when .show is toggled */
 #menu {
     visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px) scale(0.99);
+    transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.28s ease;
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform-origin: center;
     z-index: 1001; /* above backdrop */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background: transparent; /* so we only see the links */
+}
+
+/* Make visible when JS adds .show */
+#menu.show {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
 }
 
 #menu ul {
@@ -438,7 +451,6 @@ body.menu-open {
     overflow: hidden;
 }
 
-
 /* Responsive: show burger on mobile */
 @media (max-width: 768px) {
     #burger-menu {
@@ -453,6 +465,7 @@ body.menu-open {
         display: flex !important;
     }
 }
+
 
 /* ---------- End burger/menu ---------- */
 
