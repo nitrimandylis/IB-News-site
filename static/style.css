@@ -448,6 +448,10 @@ body.menu-open {
     .header-content .main-nav {
         display: none !important;
     }
+
+    #menu .main-nav {
+        display: flex !important;
+    }
 }
 
 /* ---------- End burger/menu ---------- */
