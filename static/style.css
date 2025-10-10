@@ -374,6 +374,20 @@ a:hover {
 }
 
 /* ---------- Overlay menu ---------- */
+.menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    z-index: 999; /* Ensure it's behind the menu */
+    visibility: hidden; /* Initially hidden */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
 #menu {
   position: fixed;
   top: 0;
