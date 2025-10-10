@@ -1,28 +1,31 @@
+// Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", function() {
-  // Function to update the scroll progress bar
+
+  // === Scroll Progress Bar ===
   function updateProgressBar() {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-    // Calculate the scroll percentage
     const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-    // Update the width of the progress bar
     const progressBar = document.getElementById('progressBar');
     if (progressBar) {
       progressBar.style.width = `${scrollPercent}%`;
     }
   }
 
-  // Add event listener for scroll events
   document.addEventListener('scroll', updateProgressBar);
 
-  // Burger menu function
+  // === Burger Menu Toggle ===
+  const burgerMenu = document.getElementById('burger-menu');
+  const overlay = document.getElementById('menu');
 
-  var burgerMenu = document.getElementById('burger-menu');
-  var overlay = document.getElementById('menu');
+  if (burgerMenu && overlay) {
+    burgerMenu.addEventListener('click', function() {
+      // Toggle classes
+      this.classList.toggle("close");
+      overlay.classList.toggle("overlay");
+    });
+  } else {
+    console.warn("Burger menu or overlay not found!");
+  }
 
-  burgerMenu.addEventListener('click', function() {
-    this.classList.toggle("close");
-    overlay.classList.toggle("overlay");
-  });
 });
