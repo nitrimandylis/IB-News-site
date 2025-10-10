@@ -1,4 +1,18 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* --- CSS Variables --- */
+:root {
+    --primary-color: #0070f3;
+    /* A modern, vibrant blue */
+    --dark-blue: #0056b3;
+    --text-color: #111;
+    --secondary-text-color: #666;
+    --border-color: #eaeaea;
+    --background-color: #ffffff;
+    --light-gray-bg: #fafafa;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --heading-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
 
 /* --- General Styles --- */
 body {
@@ -97,16 +111,261 @@ a:hover {
     color: #fff;
 }
 
-/* --- Burger (plain CSS version, black lines) ---------- */
+/* --- Hero Section --- */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 0;
+    background-color: var(--light-gray-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin: 0.5rem 0;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.hero-content .article-meta {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-excerpt {
+    font-size: 1.2rem;
+    color: var(--secondary-text-color);
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+}
+
+/* --- Article Grid Section --- */
+.article-grid-section {
+    padding: 4rem 0;
+}
+
+.article-grid-section h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    letter-spacing: -0.5px;
+}
+
+.article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+}
+
+.article-card {
+    background: var(--background-color);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-image-placeholder {
+    width: 100%;
+    height: 200px;
+    background-color: #e9ecef;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-content .category-tag {
+    font-size: 0.8rem;
+}
+
+.card-content h3 {
+    margin: 0.5rem 0;
+    font-size: 1.3rem;
+    line-height: 1.4;
+    letter-spacing: -0.3px;
+}
+
+.card-content .article-meta {
+    font-size: 0.9rem;
+}
+
+.read-more-link {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+/* --- Featured Video Section --- */
+.featured-video-section {
+    padding: 3rem 0;
+    background-color: var(--light-gray-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+.featured-video-section h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.video-wrapper {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+
+.video-placeholder {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    /* 16:9 Aspect Ratio */
+    background-color: #333;
+    position: relative;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.video-placeholder .fa-play-circle {
+    font-size: 5rem;
+    opacity: 0.7;
+}
+
+.video-caption {
+    margin-top: 1rem;
+}
+
+.video-caption h3 {
+    font-size: 1.5rem;
+}
+
+/* --- Footer --- */
+.site-footer-bottom {
+    background: var(--light-gray-bg);
+    color: var(--secondary-text-color);
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.footer-copyright p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* --- Responsive --- */
+@media(max-width: 992px) {
+    .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .main-nav {
+        margin-top: 1rem;
+    }
+
+    .hero-section {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-image-placeholder {
+        height: 300px;
+    }
+}
+
+@media(max-width: 768px) {
+    .main-nav {
+        display: none;
+    }
+
+    #burger-menu {
+        display: block;
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .main-nav li {
+        margin: 0.5rem 0;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    /* Mobile burger menu logic and overlay */
+    .header-content .main-nav {
+        display: none !important;
+    }
+
+    #menu .main-nav {
+        display: flex !important;
+    }
+}
+
+@media(max-width: 576px) {
+    .header-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .main-nav {
+        margin-top: 1rem;
+    }
+
+    .search-bar {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .hero-section {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+
+    .article-main-header h1 {
+        font-size: 2rem;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+/* ---------- Burger (plain CSS version, black lines) ---------- */
 #burger-menu {
-    display: none; /* hidden on desktop, shown on smaller screens via media query */
+    display: none;
+    /* hidden on desktop, shown on smaller screens via media query */
     position: fixed;
     top: 20px;
     right: 20px;
     width: 35px;
     height: 30px;
     cursor: pointer;
-    z-index: 1003; /* above header (header is 1000) */
+    z-index: 1003;
+    /* above header (header is 1000) */
     background: transparent;
     border: 0;
 }
@@ -125,7 +384,7 @@ a:hover {
     position: absolute;
     height: 4px;
     width: 100%;
-    background-color: #111; /* black-ish lines */
+    background-color: #111;
     border-radius: 2px;
     transition: all 0.3s ease-in-out;
     left: 0;
@@ -139,36 +398,37 @@ a:hover {
 
 /* top and bottom pseudo bars */
 #burger-menu span::before {
-    content: "";
+    content: '';
     top: -10px;
 }
+
 #burger-menu span::after {
-    content: "";
+    content: '';
     top: 10px;
 }
 
 /* Open state (JS should toggle 'open' on #burger-menu) */
-#burger-menu.open span {
+#burger-menu.open span,
+#burger-menu.close span {
     background-color: transparent;
 }
+
 #burger-menu.open span::before {
     transform: rotate(45deg);
     top: 0;
 }
+
 #burger-menu.open span::after {
     transform: rotate(-45deg);
     top: 0;
 }
 
-/* Compatibility: if some code toggles 'close' like your original SCSS, support it too */
-#burger-menu.close span {
-    background-color: transparent;
-}
 #burger-menu.close span::before {
     top: 0;
     transform: rotate(90deg);
     width: 100%;
 }
+
 #burger-menu.close span::after {
     top: 0;
     left: 0;
@@ -185,17 +445,16 @@ a:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* dark semi-transparent */
-    backdrop-filter: blur(8px); /* blur the content behind */
+    background: rgba(0, 0, 0, 0.7);
+    /* dark semi-transparent */
+    backdrop-filter: blur(8px);
+    /* blur the content behind */
     opacity: 0;
     visibility: hidden;
     z-index: 1000;
-    transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* When menu is open */
 .menu-backdrop.show {
     opacity: 1;
     visibility: visible;
@@ -207,13 +466,13 @@ a:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, calc(-50% - 10px)) scale(0.98);
-    z-index: 1001; /* above backdrop */
+    z-index: 1001;
     display: flex;
     flex-direction: column;
     text-align: center;
     align-items: center;
     justify-content: center;
-    width: 80%; /* Adjust as needed */
+    width: 80%;
     background-color: var(--background-color);
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -221,16 +480,12 @@ a:hover {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease,
-        transform 0.25s ease;
+    transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.28s ease;
 }
 
-/* Make visible when JS adds .show */
 #menu.show {
-    opacity: 1;
     visibility: visible;
+    opacity: 1;
     pointer-events: auto;
     transform: translate(-50%, -50%) scale(1);
 }
@@ -263,28 +518,14 @@ a:hover {
     color: var(--primary-color);
 }
 
-/* Responsive: show burger on mobile */
-@media (max-width: 768px) {
-    #burger-menu {
-        display: block;
-    }
-
-    .header-content .main-nav {
-        display: none !important;
-    }
-
-    #menu .main-nav {
-        display: flex !important;
-    }
-}
-
-/* Disable body scroll when menu is open */
+/* Optional: hide scroll when menu open */
 body.menu-open {
     overflow: hidden;
 }
 
 /* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
+
     #burger-menu span,
     #burger-menu span::before,
     #burger-menu span::after,
@@ -294,4 +535,130 @@ body.menu-open {
     }
 }
 
-/* ---------- End burger/menu ---------- */
+/* --- Article View Styles --- */
+.article-header {
+    box-shadow: none;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.article-header-image {
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 2rem;
+    border-radius: 5px;
+}
+
+.article-container {
+    max-width: 800px;
+    padding-top: 2rem;
+}
+
+.article-main-header {
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+}
+
+.article-main-header h1 {
+    font-size: 3rem;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.article-body {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #343a40;
+}
+
+.article-body p {
+    margin-bottom: 1.5rem;
+}
+
+/* --- Reading Progress Bar --- */
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background: #f8f9fa;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--primary-color);
+    width: 0%;
+}
+
+/* --- Fade-in Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* --- Admin Form --- */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
+}
+
+textarea {
+    min-height: 250px;
+    resize: vertical;
+}
+
+.btn {
+    display: inline-block;
+    width: auto;
+    padding: 1rem 2rem;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--dark-blue);
+}
