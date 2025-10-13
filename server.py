@@ -188,16 +188,24 @@ def edit_article(article_id):
         image_url = request.form['image_url']
         image_file = request.files.get('image')
 
-        if image_file:
+        if image_file and image_file.filename != '':
+            # New image uploaded
             image_data = image_file.read()
             cur.execute(
-                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = %s, image_data = %s, created_at = CURRENT_TIMESTAMP WHERE id = %s',
-                (title, author, content, image_url, image_data, article_id)
+                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = NULL, image_data = %s, created_at = CURRENT_TIMESTAMP WHERE id = %s',
+                (title, author, content, image_data, article_id)
+            )
+        elif image_url:
+            # New image URL provided
+            cur.execute(
+                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = %s, image_data = NULL, created_at = CURRENT_TIMESTAMP WHERE id = %s',
+                (title, author, content, image_url, article_id)
             )
         else:
+            # No new image, keep existing
             cur.execute(
-                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = %s, created_at = CURRENT_TIMESTAMP WHERE id = %s',
-                (title, author, content, image_url, article_id)
+                'UPDATE articles SET title = %s, author = %s, content = %s, created_at = CURRENT_TIMESTAMP WHERE id = %s',
+                (title, author, content, article_id)
             )
         
         conn.commit()
