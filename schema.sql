@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS articles (
     author TEXT NOT NULL,
     content TEXT NOT NULL,
     image_url TEXT,
+    image_data BYTEA,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

@@ -14,7 +14,9 @@
             <p class="article-meta">By {{ article.author }} | Published on {{ article.created_at.strftime('%B %d, %Y') }}</p>
         </header>
 
-        {% if article.image_url %}
+        {% if article.has_image %}
+        <div class="article-header-image" style="background-image: url('{{ url_for('get_image', article_id=article.id) }}');"></div>
+        {% elif article.image_url %}
         <div class="article-header-image" style="background-image: url('{{ article.image_url }}');"></div>
         {% endif %}
         

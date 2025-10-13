@@ -32,7 +32,7 @@ def close_connection(exception):
 def index():
     conn = get_db()
     cur = conn.cursor()
-    cur.execute('SELECT id, title, author, content, image_url, created_at FROM articles ORDER BY created_at DESC;')
+    cur.execute('SELECT id, title, author, content, image_url, created_at, image_data IS NOT NULL FROM articles ORDER BY created_at DESC;')
     articles = cur.fetchall()
     cur.close()
     
@@ -44,7 +44,8 @@ def index():
             'author': article[2],
             'content': article[3],
             'image_url': article[4],
-            'created_at': article[5]
+            'created_at': article[5],
+            'has_image': article[6]
         })
 
     return render_template('index.html', articles=articles_dict)
@@ -53,7 +54,7 @@ def index():
 def article(article_id):
     conn = get_db()
     cur = conn.cursor()
-    cur.execute('SELECT id, title, author, content, image_url, created_at FROM articles WHERE id = %s', (article_id,))
+    cur.execute('SELECT id, title, author, content, image_url, created_at, image_data IS NOT NULL FROM articles WHERE id = %s', (article_id,))
     article_data = cur.fetchone()
     cur.close()
 
@@ -66,10 +67,24 @@ def article(article_id):
         'author': article_data[2],
         'content': article_data[3],
         'image_url': article_data[4],
-        'created_at': article_data[5]
+        'created_at': article_data[5],
+        'has_image': article_data[6]
     }
 
     return render_template('article.html', article=article_dict)
+
+@app.route('/image/<int:article_id>')
+def get_image(article_id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT image_data FROM articles WHERE id = %s', (article_id,))
+    image_data = cur.fetchone()[0]
+    cur.close()
+
+    if image_data is None:
+        return "Image not found", 404
+
+    return image_data, {'Content-Type': 'image/jpeg'}
 
 @app.route('/about')
 def about():
@@ -126,12 +141,15 @@ def add_article():
     content = request.form['content']
     image_url = request.form['image_url']
     
+    image_file = request.files['image']
+    image_data = image_file.read() if image_file else None
+
     conn = get_db()
     cur = conn.cursor()
     # Use parameterized query to prevent SQL injection
     cur.execute(
-        'INSERT INTO articles (title, author, content, image_url) VALUES (%s, %s, %s, %s)',
-        (title, author, content, image_url)
+        'INSERT INTO articles (title, author, content, image_url, image_data) VALUES (%s, %s, %s, %s, %s)',
+        (title, author, content, image_url, image_data)
     )
     conn.commit()
     cur.close()
