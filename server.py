@@ -1,6 +1,6 @@
 import os
 import psycopg2
-from flask import Flask, render_template, g, request, redirect, url_for, session
+from flask import Flask, render_template, g, request, redirect, url_for, session, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # --- Basic App Setup ---
@@ -87,7 +87,9 @@ def get_image(article_id):
     else:
         app.logger.info(f"Image found for article {article_id}, length: {len(image_data)}")
 
-    return image_data, {'Content-Type': 'image/jpeg'}
+    response = make_response(bytes(image_data))
+    response.headers.set('Content-Type', 'image/jpeg')
+    return response
 
 @app.route('/about')
 def about():
