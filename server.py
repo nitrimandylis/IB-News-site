@@ -102,7 +102,20 @@ def logout():
 def admin():
     if 'user' not in session:
         return redirect(url_for('login'))
-    return render_template('admin.html')
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT id, title FROM articles ORDER BY created_at DESC;')
+    articles = cur.fetchall()
+    cur.close()
+    
+    articles_dict = []
+    for article in articles:
+        articles_dict.append({
+            'id': article[0],
+            'title': article[1],
+        })
+
+    return render_template('admin.html', articles=articles_dict)
 
 @app.route('/admin/add', methods=['POST'])
 def add_article():

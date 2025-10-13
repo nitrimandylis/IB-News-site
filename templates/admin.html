@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Admin - Add New Article{% endblock %}
+{% block title %}Admin Panel{% endblock %}
 {% block content %}
 <div class="container">
     <h1>Add New Article</h1>
@@ -22,5 +22,19 @@
         </div>
         <button type="submit" class="btn">Publish Article</button>
     </form>
+
+    <hr>
+
+    <h2>Manage Articles</h2>
+    <ul class="article-list">
+        {% for article in articles %}
+            <li>
+                <span>{{ article.title }}</span>
+                <form action="/admin/delete/{{ article.id }}" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
