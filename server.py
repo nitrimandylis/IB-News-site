@@ -82,7 +82,10 @@ def get_image(article_id):
     cur.close()
 
     if image_data is None:
+        app.logger.error(f"Image not found for article {article_id}")
         return "Image not found", 404
+    else:
+        app.logger.info(f"Image found for article {article_id}, length: {len(image_data)}")
 
     return image_data, {'Content-Type': 'image/jpeg'}
 
@@ -166,8 +169,55 @@ def delete_article(article_id):
     cur.execute('DELETE FROM articles WHERE id = %s', (article_id,))
     conn.commit()
     cur.close()
-    
     return redirect(url_for('admin'))
+
+@app.route('/admin/edit/<int:article_id>', methods=['GET', 'POST'])
+def edit_article(article_id):
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    if request.method == 'POST':
+        title = request.form['title']
+        author = request.form['author']
+        content = request.form['content']
+        image_url = request.form['image_url']
+        image_file = request.files.get('image')
+
+        if image_file:
+            image_data = image_file.read()
+            cur.execute(
+                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = %s, image_data = %s, created_at = CURRENT_TIMESTAMP WHERE id = %s',
+                (title, author, content, image_url, image_data, article_id)
+            )
+        else:
+            cur.execute(
+                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = %s, created_at = CURRENT_TIMESTAMP WHERE id = %s',
+                (title, author, content, image_url, article_id)
+            )
+        
+        conn.commit()
+        cur.close()
+        return redirect(url_for('admin'))
+
+    cur.execute('SELECT id, title, author, content, image_url FROM articles WHERE id = %s', (article_id,))
+    article = cur.fetchone()
+    cur.close()
+
+    if article is None:
+        return "Article not found", 404
+
+    article_dict = {
+        'id': article[0],
+        'title': article[1],
+        'author': article[2],
+        'content': article[3],
+        'image_url': article[4]
+    }
+
+    return render_template('edit_article.html', article=article_dict)
 
 # --- Main Execution ---
 

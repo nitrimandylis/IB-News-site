@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Admin Panel{% endblock %}
+{% block title %}Dashboard{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Add New Article</h1>
+    <h1>Post Article</h1>
     <form action="/admin/add" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="title">Title</label>
@@ -34,6 +34,7 @@
         {% for article in articles %}
             <li>
                 <span>{{ article.title }}</span>
+                <a href="/admin/edit/{{ article.id }}" class="btn">Edit</a>
                 <form action="/admin/delete/{{ article.id }}" method="POST" style="display: inline;">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
