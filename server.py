@@ -138,6 +138,19 @@ def add_article():
     
     return redirect(url_for('index'))
 
+@app.route('/admin/delete/<int:article_id>', methods=['POST'])
+def delete_article(article_id):
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('DELETE FROM articles WHERE id = %s', (article_id,))
+    conn.commit()
+    cur.close()
+    
+    return redirect(url_for('admin'))
+
 # --- Main Execution ---
 
 if __name__ == '__main__':

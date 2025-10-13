@@ -681,3 +681,27 @@ textarea {
 .btn:hover {
     background: var(--dark-blue);
 }
+
+/* --- Admin Article List --- */
+.article-list {
+    list-style: none;
+    padding: 0;
+}
+
+.article-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.article-list li span {
+    flex-grow: 1;
+}
+
+.article-list .btn-danger {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    margin-left: 1rem;
+}
