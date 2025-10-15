@@ -40,6 +40,7 @@ content %}
                 action="/admin/delete/{{ article.id }}"
                 method="POST"
                 style="display: inline"
+                onsubmit="return confirm('Are you sure you want to delete this article?');"
             >
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
