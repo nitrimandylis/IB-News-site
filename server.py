@@ -2,6 +2,9 @@ import os
 import psycopg2
 from flask import Flask, render_template, g, request, redirect, url_for, session, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # --- Basic App Setup ---
 app = Flask(__name__)
@@ -16,6 +19,8 @@ users = {
 # --- Database Connection Functions ---
 def get_db():
     DATABASE_URL = os.environ['DATABASE_URL']
+    if DATABASE_URL.startswith("https://"):
+        DATABASE_URL = DATABASE_URL.replace('https://', 'postgresql://')
     if 'db' not in g:
         g.db = psycopg2.connect(DATABASE_URL)
     return g.db

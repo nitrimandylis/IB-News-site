@@ -6,6 +6,8 @@ import psycopg2
 # seed data if the table is empty.
 
 DATABASE_URL = os.environ['DATABASE_URL']
+if DATABASE_URL.startswith("https://"):
+    DATABASE_URL = DATABASE_URL.replace('https://', 'postgresql://')
 
 conn = psycopg2.connect(DATABASE_URL)
 cur = conn.cursor()
