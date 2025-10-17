@@ -27,3 +27,6 @@ Thumbs.db
 # Documentation
 Gemini.md
 trim.txt
+
+# Environment variables
+.env

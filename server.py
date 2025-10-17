@@ -18,11 +18,14 @@ users = {
 
 # --- Database Connection Functions ---
 def get_db():
-    DATABASE_URL = os.environ['DATABASE_URL']
-    if DATABASE_URL.startswith("https://"):
-        DATABASE_URL = DATABASE_URL.replace('https://', 'postgresql://')
     if 'db' not in g:
-        g.db = psycopg2.connect(DATABASE_URL)
+        try:
+            DATABASE_URL = os.environ['DATABASE_URL']
+            if DATABASE_URL.startswith("https://"):
+                DATABASE_URL = DATABASE_URL.replace('https://', 'postgresql://')
+            g.db = psycopg2.connect(DATABASE_URL)
+        except psycopg2.OperationalError:
+            return None
     return g.db
 
 @app.teardown_appcontext
@@ -36,6 +39,8 @@ def close_connection(exception):
 @app.route('/')
 def index():
     conn = get_db()
+    if conn is None:
+        return render_template('index.html', articles=[])
     cur = conn.cursor()
     cur.execute('SELECT id, title, author, content, image_url, created_at, image_data IS NOT NULL FROM articles ORDER BY created_at DESC;')
     articles = cur.fetchall()
@@ -58,6 +63,8 @@ def index():
 @app.route('/article/<int:article_id>')
 def article(article_id):
     conn = get_db()
+    if conn is None:
+        return "Database not available", 503
     cur = conn.cursor()
     cur.execute('SELECT id, title, author, content, image_url, created_at, image_data IS NOT NULL FROM articles WHERE id = %s', (article_id,))
     article_data = cur.fetchone()
@@ -81,6 +88,8 @@ def article(article_id):
 @app.route('/image/<int:article_id>')
 def get_image(article_id):
     conn = get_db()
+    if conn is None:
+        return "Image not found", 404
     cur = conn.cursor()
     cur.execute('SELECT image_data FROM articles WHERE id = %s', (article_id,))
     image_data = cur.fetchone()[0]
@@ -128,6 +137,8 @@ def admin():
     if 'user' not in session:
         return redirect(url_for('login'))
     conn = get_db()
+    if conn is None:
+        return render_template('admin.html', articles=[])
     cur = conn.cursor()
     cur.execute('SELECT id, title FROM articles ORDER BY created_at DESC;')
     articles = cur.fetchall()
@@ -155,6 +166,8 @@ def add_article():
     image_data = image_file.read() if image_file else None
 
     conn = get_db()
+    if conn is None:
+        return "Database not available", 503
     cur = conn.cursor()
     # Use parameterized query to prevent SQL injection
     cur.execute(
@@ -172,6 +185,8 @@ def delete_article(article_id):
         return redirect(url_for('login'))
     
     conn = get_db()
+    if conn is None:
+        return "Database not available", 503
     cur = conn.cursor()
     cur.execute('DELETE FROM articles WHERE id = %s', (article_id,))
     conn.commit()
@@ -184,6 +199,8 @@ def edit_article(article_id):
         return redirect(url_for('login'))
 
     conn = get_db()
+    if conn is None:
+        return "Database not available", 503
     cur = conn.cursor()
 
     if request.method == 'POST':

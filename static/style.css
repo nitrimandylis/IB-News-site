@@ -115,11 +115,25 @@ a:hover {
 .hero-section {
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 6rem 0;
+    justify-content: space-between;
+    padding: 4rem 0;
     background-color: var(--light-gray-bg);
     border-bottom: 1px solid var(--border-color);
+}
+
+.hero-image {
+    flex: 1;
+    margin-right: 2rem;
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.hero-text {
+    flex: 1;
 }
 
 .hero-content h1 {
@@ -138,7 +152,18 @@ a:hover {
     font-size: 1.2rem;
     color: var(--secondary-text-color);
     max-width: 600px;
-    margin: 0 auto 1.5rem auto;
+    margin: 0 0 1.5rem 0;
+}
+
+@media(max-width: 992px) {
+    .hero-section {
+        flex-direction: column;
+    }
+
+    .hero-image {
+        margin-right: 0;
+        margin-bottom: 2rem;
+    }
 }
 
 /* --- Article Grid Section --- */

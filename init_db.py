@@ -1,5 +1,8 @@
 import os
 import psycopg2
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # This script is now idempotent. It can be run many times without changing the result
 # after the first run. It creates the table if it doesn't exist, and only adds

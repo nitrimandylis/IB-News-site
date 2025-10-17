@@ -5,7 +5,10 @@
 
 {% if articles %}
 <section class="hero-section">
-    <div class="hero-content">
+    <div class="hero-image">
+        <img src="{% if articles[0].has_image %}{{ url_for('get_image', article_id=articles[0].id) }}{% else %}{{ articles[0].image_url }}{% endif %}" alt="Featured Article Image">
+    </div>
+    <div class="hero-text">
         <span class="category-tag">Featured Story</span>
         <h1>{{ articles[0]['title'] }}</h1>
         <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'].strftime('%Y-%m-%d') }}</p>
