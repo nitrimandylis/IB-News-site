@@ -27,6 +27,7 @@ Thumbs.db
 # Documentation
 Gemini.md
 trim.txt
+image_rendering_report.md
 
 # Environment variables
 .env
