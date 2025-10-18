@@ -12,6 +12,11 @@
         <header class="article-main-header">
             <h1>{{ article.title }}</h1>
             <p class="article-meta">By {{ article.author }} | Published on {{ article.created_at.strftime('%B %d, %Y') }}</p>
+            <div class="tags-container">
+                {% for tag in article.tags %}
+                    <span class="category-tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
         </header>
 
         {% if article.has_image %}

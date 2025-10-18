@@ -63,6 +63,18 @@ if empty:
 else:
     print("Table 'articles' already contains data. Skipping initial data insertion.")
 
+# Check if the tags table is empty
+cur.execute("SELECT COUNT(id) FROM tags")
+tags_empty = cur.fetchone()[0] == 0
+
+if tags_empty:
+    print("Table 'tags' was empty, inserting initial data.")
+    tags = ["Academics", "Sports", "Student Life", "College Counseling", "Arts"]
+    for tag in tags:
+        cur.execute("INSERT INTO tags (name) VALUES (%s)", (tag,))
+else:
+    print("Table 'tags' already contains data. Skipping initial data insertion.")
+
 # Commit the changes and close the connection
 conn.commit()
 cur.close()

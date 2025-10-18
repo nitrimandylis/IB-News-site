@@ -10,7 +10,11 @@
             <img src="{% if articles[0].has_image %}{{ url_for('get_image', article_id=articles[0].id) }}{% else %}{{ articles[0].image_url }}{% endif %}" alt="Featured Article Image">
         </div>
         <div class="hero-text">
-            <span class="category-tag">Featured Story</span>
+            <div>
+            {% for tag in articles[0].tags %}
+                <span class="category-tag">{{ tag }}</span>
+            {% endfor %}
+        </div>
             <h1>{{ articles[0]['title'] }}</h1>
             <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'].strftime('%Y-%m-%d') }}</p>
             <p class="hero-excerpt">{{ articles[0]['content'][:150] }}...</p> {# Show a preview of the content #}
@@ -29,7 +33,11 @@
         <a href="{{ url_for('article', article_id=article['id']) }}" class="article-card">
             <div class="card-image-placeholder" style="background-image: url('{% if article.has_image %}{{ url_for('get_image', article_id=article.id) }}{% else %}{{ article.image_url }}{% endif %}');"></div>
             <div class="card-content">
-                <span class="category-tag">Academics</span> {# Category can be a future DB field #}
+                <div>
+                    {% for tag in article.tags %}
+                        <span class="category-tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
                 <h3>{{ article['title'] }}</h3>
                 <p class="article-meta">By {{ article['author'] }} | {{ article['created_at'].strftime('%Y-%m-%d') }}</p>
                 <span class="read-more-link">Read More &rarr;</span>

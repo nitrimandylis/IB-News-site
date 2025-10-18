@@ -42,7 +42,15 @@ def index():
     if conn is None:
         return render_template('index.html', articles=[])
     cur = conn.cursor()
-    cur.execute('SELECT id, title, author, content, image_url, created_at, image_data IS NOT NULL FROM articles ORDER BY created_at DESC;')
+    cur.execute('''
+        SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
+               STRING_AGG(t.name, ',')
+        FROM articles a
+        LEFT JOIN article_tags at ON a.id = at.article_id
+        LEFT JOIN tags t ON at.tag_id = t.id
+        GROUP BY a.id
+        ORDER BY a.created_at DESC;
+    ''')
     articles = cur.fetchall()
     cur.close()
     
@@ -55,7 +63,8 @@ def index():
             'content': article[3],
             'image_url': article[4],
             'created_at': article[5],
-            'has_image': article[6]
+            'has_image': article[6],
+            'tags': article[7].split(',') if article[7] else []
         })
 
     return render_template('index.html', articles=articles_dict)
@@ -66,7 +75,15 @@ def article(article_id):
     if conn is None:
         return "Database not available", 503
     cur = conn.cursor()
-    cur.execute('SELECT id, title, author, content, image_url, created_at, image_data IS NOT NULL FROM articles WHERE id = %s', (article_id,))
+    cur.execute('''
+        SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
+               STRING_AGG(t.name, ',')
+        FROM articles a
+        LEFT JOIN article_tags at ON a.id = at.article_id
+        LEFT JOIN tags t ON at.tag_id = t.id
+        WHERE a.id = %s
+        GROUP BY a.id;
+    ''', (article_id,))
     article_data = cur.fetchone()
     cur.close()
 
@@ -80,7 +97,8 @@ def article(article_id):
         'content': article_data[3],
         'image_url': article_data[4],
         'created_at': article_data[5],
-        'has_image': article_data[6]
+        'has_image': article_data[6],
+        'tags': article_data[7].split(',') if article_data[7] else []
     }
 
     return render_template('article.html', article=article_dict)
@@ -149,31 +167,55 @@ def admin():
 
     return render_template('admin.html', articles=articles_dict)
 
-@app.route('/admin/add', methods=['POST'])
+@app.route('/admin/add', methods=['GET', 'POST'])
 def add_article():
     if 'user' not in session:
         return redirect(url_for('login'))
-    title = request.form['title']
-    author = request.form['author']
-    content = request.form['content']
-    image_url = request.form['image_url']
-    
-    image_file = request.files['image']
-    image_data = image_file.read() if image_file else None
 
     conn = get_db()
     if conn is None:
         return "Database not available", 503
     cur = conn.cursor()
-    # Use parameterized query to prevent SQL injection
-    cur.execute(
-        'INSERT INTO articles (title, author, content, image_url, image_data) VALUES (%s, %s, %s, %s, %s)',
-        (title, author, content, image_url, image_data)
-    )
-    conn.commit()
+
+    if request.method == 'POST':
+        title = request.form['title']
+        author = request.form['author']
+        content = request.form['content']
+        image_url = request.form['image_url']
+        tag_ids = request.form.getlist('tags')
+        
+        image_file = request.files['image']
+        image_data = image_file.read() if image_file else None
+
+        cur.execute(
+            'INSERT INTO articles (title, author, content, image_url, image_data) VALUES (%s, %s, %s, %s, %s) RETURNING id',
+            (title, author, content, image_url, image_data)
+        )
+        article_id = cur.fetchone()[0]
+
+        for tag_id in tag_ids:
+            cur.execute(
+                'INSERT INTO article_tags (article_id, tag_id) VALUES (%s, %s)',
+                (article_id, tag_id)
+            )
+
+        conn.commit()
+        cur.close()
+        
+        return redirect(url_for('index'))
+
+    cur.execute('SELECT id, name FROM tags ORDER BY name')
+    tags = cur.fetchall()
     cur.close()
-    
-    return redirect(url_for('index'))
+
+    tags_dict = []
+    for tag in tags:
+        tags_dict.append({
+            'id': tag[0],
+            'name': tag[1]
+        })
+
+    return render_template('add_article.html', tags=tags_dict)
 
 @app.route('/admin/delete/<int:article_id>', methods=['POST'])
 def delete_article(article_id):
@@ -204,6 +246,7 @@ def edit_article(article_id):
         author = request.form['author']
         content = request.form['content']
         image_url = request.form['image_url']
+        tag_ids = request.form.getlist('tags')
         image_file = request.files.get('image')
 
         if image_file and image_file.filename != '':
@@ -226,26 +269,51 @@ def edit_article(article_id):
                 (title, author, content, article_id)
             )
         
+        # Update tags
+        cur.execute('DELETE FROM article_tags WHERE article_id = %s', (article_id,))
+        for tag_id in tag_ids:
+            cur.execute(
+                'INSERT INTO article_tags (article_id, tag_id) VALUES (%s, %s)',
+                (article_id, tag_id)
+            )
+
         conn.commit()
         cur.close()
         return redirect(url_for('admin'))
 
+    # GET request
     cur.execute('SELECT id, title, author, content, image_url FROM articles WHERE id = %s', (article_id,))
     article = cur.fetchone()
-    cur.close()
 
     if article is None:
+        cur.close()
         return "Article not found", 404
+
+    cur.execute('SELECT id, name FROM tags ORDER BY name')
+    all_tags = cur.fetchall()
+
+    cur.execute('SELECT tag_id FROM article_tags WHERE article_id = %s', (article_id,))
+    article_tags = [row[0] for row in cur.fetchall()]
+    
+    cur.close()
 
     article_dict = {
         'id': article[0],
         'title': article[1],
         'author': article[2],
         'content': article[3],
-        'image_url': article[4]
+        'image_url': article[4],
+        'tags': article_tags
     }
 
-    return render_template('edit_article.html', article=article_dict)
+    all_tags_dict = []
+    for tag in all_tags:
+        all_tags_dict.append({
+            'id': tag[0],
+            'name': tag[1]
+        })
+
+    return render_template('edit_article.html', article=article_dict, tags=all_tags_dict)
 
 # --- Main Execution ---
 
