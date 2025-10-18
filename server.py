@@ -152,10 +152,13 @@ def admin():
         return redirect(url_for('login'))
     conn = get_db()
     if conn is None:
-        return render_template('admin.html', articles=[])
+        return render_template('admin.html', articles=[], tags=[])
     cur = conn.cursor()
     cur.execute('SELECT id, title FROM articles ORDER BY created_at DESC;')
     articles = cur.fetchall()
+    
+    cur.execute('SELECT id, name FROM tags ORDER BY name')
+    tags = cur.fetchall()
     cur.close()
     
     articles_dict = []
@@ -165,9 +168,16 @@ def admin():
             'title': article[1],
         })
 
-    return render_template('admin.html', articles=articles_dict)
+    tags_dict = []
+    for tag in tags:
+        tags_dict.append({
+            'id': tag[0],
+            'name': tag[1]
+        })
 
-@app.route('/admin/add', methods=['GET', 'POST'])
+    return render_template('admin.html', articles=articles_dict, tags=tags_dict)
+
+@app.route('/admin/add', methods=['POST'])
 def add_article():
     if 'user' not in session:
         return redirect(url_for('login'))
@@ -177,45 +187,31 @@ def add_article():
         return "Database not available", 503
     cur = conn.cursor()
 
-    if request.method == 'POST':
-        title = request.form['title']
-        author = request.form['author']
-        content = request.form['content']
-        image_url = request.form['image_url']
-        tag_ids = request.form.getlist('tags')
-        
-        image_file = request.files['image']
-        image_data = image_file.read() if image_file else None
+    title = request.form['title']
+    author = request.form['author']
+    content = request.form['content']
+    image_url = request.form['image_url']
+    tag_ids = request.form.getlist('tags')
+    
+    image_file = request.files['image']
+    image_data = image_file.read() if image_file else None
 
+    cur.execute(
+        'INSERT INTO articles (title, author, content, image_url, image_data) VALUES (%s, %s, %s, %s, %s) RETURNING id',
+        (title, author, content, image_url, image_data)
+    )
+    article_id = cur.fetchone()[0]
+
+    for tag_id in tag_ids:
         cur.execute(
-            'INSERT INTO articles (title, author, content, image_url, image_data) VALUES (%s, %s, %s, %s, %s) RETURNING id',
-            (title, author, content, image_url, image_data)
+            'INSERT INTO article_tags (article_id, tag_id) VALUES (%s, %s)',
+            (article_id, tag_id)
         )
-        article_id = cur.fetchone()[0]
 
-        for tag_id in tag_ids:
-            cur.execute(
-                'INSERT INTO article_tags (article_id, tag_id) VALUES (%s, %s)',
-                (article_id, tag_id)
-            )
-
-        conn.commit()
-        cur.close()
-        
-        return redirect(url_for('index'))
-
-    cur.execute('SELECT id, name FROM tags ORDER BY name')
-    tags = cur.fetchall()
+    conn.commit()
     cur.close()
-
-    tags_dict = []
-    for tag in tags:
-        tags_dict.append({
-            'id': tag[0],
-            'name': tag[1]
-        })
-
-    return render_template('add_article.html', tags=tags_dict)
+    
+    return redirect(url_for('admin'))
 
 @app.route('/admin/delete/<int:article_id>', methods=['POST'])
 def delete_article(article_id):

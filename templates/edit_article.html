@@ -22,11 +22,21 @@
         </div>
         <div class="form-group">
             <label for="tags">Tags</label>
-            <select id="tags" name="tags" multiple>
-                {% for tag in tags %}
-                    <option value="{{ tag.id }}" {% if tag.id in article.tags %}selected{% endif %}>{{ tag.name }}</option>
-                {% endfor %}
-            </select>
+            <div class="custom-select-wrapper">
+                <div class="custom-select">
+                    <div class="custom-select__trigger"><span>Select Tags</span>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="custom-options">
+                        {% for tag in tags %}
+                            <div class="custom-option" data-value="{{ tag.id }}">
+                                <input type="checkbox" id="tag-{{ tag.id }}" name="tags" value="{{ tag.id }}" {% if tag.id in article.tags %}checked{% endif %}>
+                                <label for="tag-{{ tag.id }}">{{ tag.name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="content">Content</label>

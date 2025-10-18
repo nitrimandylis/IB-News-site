@@ -111,4 +111,39 @@ document.addEventListener("DOMContentLoaded", function () {
             setFocusableElements(); // Update focusable elements on resize
         }
     });
+
+    // === Custom Select Dropdown ===
+    const customSelect = document.querySelector('.custom-select');
+    if (customSelect) {
+        const trigger = customSelect.querySelector('.custom-select__trigger');
+        const options = customSelect.querySelector('.custom-options');
+        const optionCheckboxes = options.querySelectorAll('input[type="checkbox"]');
+        const triggerSpan = trigger.querySelector('span');
+
+        function updateTriggerText() {
+            const checkedOptions = Array.from(optionCheckboxes).filter(el => el.checked);
+            if (checkedOptions.length > 0) {
+                triggerSpan.textContent = checkedOptions.map(el => el.nextElementSibling.textContent).join(', ');
+            } else {
+                triggerSpan.textContent = 'Select Tags';
+            }
+        }
+
+        trigger.addEventListener('click', () => {
+            customSelect.classList.toggle('open');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!customSelect.contains(e.target)) {
+                customSelect.classList.remove('open');
+            }
+        });
+
+        optionCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateTriggerText);
+        });
+
+        // Initial text update on page load
+        updateTriggerText();
+    }
 });

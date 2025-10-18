@@ -2,7 +2,47 @@
 content %}
 <div class="container">
     <h1>Admin Dashboard</h1>
-    <a href="{{ url_for('add_article') }}" class="btn">Add New Article</a>
+    <form action="/admin/add" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required />
+        </div>
+        <div class="form-group">
+            <label for="author">Author</label>
+            <input type="text" id="author" name="author" required />
+        </div>
+        <div class="form-group">
+            <label for="image">Image Upload</label>
+            <input type="file" id="image" name="image" accept="image/*" />
+        </div>
+        <div class="form-group">
+            <label for="image_url">Or Image URL</label>
+            <input type="text" id="image_url" name="image_url" />
+        </div>
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <div class="custom-select-wrapper">
+                <div class="custom-select">
+                    <div class="custom-select__trigger"><span>Select Tags</span>
+                        <div class="arrow"></div>
+                    </div>
+                    <div class="custom-options">
+                        {% for tag in tags %}
+                            <div class="custom-option" data-value="{{ tag.id }}">
+                                <input type="checkbox" id="tag-{{ tag.id }}" name="tags" value="{{ tag.id }}">
+                                <label for="tag-{{ tag.id }}">{{ tag.name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" required></textarea>
+        </div>
+        <button type="submit" class="btn">Publish Article</button>
+    </form>
 
     <hr />
 
