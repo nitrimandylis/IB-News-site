@@ -20,9 +20,9 @@
         </header>
 
         {% if article.has_image %}
-        <div class="article-header-image" style="background-image: url('{{ url_for('get_image', article_id=article.id) }}');"></div>
+        <img src="{{ url_for('get_image', article_id=article.id) }}" class="article-header-image" alt="Article Header Image">
         {% elif article.image_url %}
-        <div class="article-header-image" style="background-image: url('{{ article.image_url }}');"></div>
+        <img src="{{ article.image_url }}" class="article-header-image" alt="Article Header Image">
         {% endif %}
         
         <div class="article-body">

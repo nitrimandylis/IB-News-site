@@ -1,6 +1,7 @@
 import os
 import psycopg2
-from flask import Flask, render_template, g, request, redirect, url_for, session, make_response
+import mimetypes
+from flask import Flask, render_template, g, request, redirect, url_for, session, make_response, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 
@@ -9,6 +10,13 @@ load_dotenv()
 # --- Basic App Setup ---
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
+
+# --- Image Upload Settings ---
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # --- User Authentication ---
 # In a real app, you'd store this in a database or a more secure config.
@@ -109,18 +117,20 @@ def get_image(article_id):
     if conn is None:
         return "Image not found", 404
     cur = conn.cursor()
-    cur.execute('SELECT image_data FROM articles WHERE id = %s', (article_id,))
-    image_data = cur.fetchone()[0]
+    cur.execute('SELECT image_data, image_mime_type FROM articles WHERE id = %s', (article_id,))
+    row = cur.fetchone()
     cur.close()
 
-    if image_data is None:
+    if row is None or row[0] is None:
         app.logger.error(f"Image not found for article {article_id}")
         return "Image not found", 404
-    else:
-        app.logger.info(f"Image found for article {article_id}, length: {len(image_data)}")
+    
+    image_data, image_mime_type = row
+    
+    app.logger.info(f"Image found for article {article_id}, length: {len(image_data)}")
 
     response = make_response(bytes(image_data))
-    response.headers.set('Content-Type', 'image/jpeg')
+    response.headers.set('Content-Type', image_mime_type or 'application/octet-stream')
     return response
 
 @app.route('/about')
@@ -193,12 +203,21 @@ def add_article():
     image_url = request.form['image_url']
     tag_ids = request.form.getlist('tags')
     
-    image_file = request.files['image']
-    image_data = image_file.read() if image_file else None
+    image_file = request.files.get('image')
+    image_data = None
+    image_mime_type = None
+
+    if image_file and image_file.filename != '':
+        if allowed_file(image_file.filename):
+            image_data = image_file.read()
+            image_mime_type = image_file.mimetype
+        else:
+            flash('Invalid image file type. Allowed types are png, jpg, jpeg, gif.', 'error')
+            return redirect(url_for('admin'))
 
     cur.execute(
-        'INSERT INTO articles (title, author, content, image_url, image_data) VALUES (%s, %s, %s, %s, %s) RETURNING id',
-        (title, author, content, image_url, image_data)
+        'INSERT INTO articles (title, author, content, image_url, image_data, image_mime_type) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id',
+        (title, author, content, image_url, image_data, image_mime_type)
     )
     article_id = cur.fetchone()[0]
 
@@ -246,16 +265,20 @@ def edit_article(article_id):
         image_file = request.files.get('image')
 
         if image_file and image_file.filename != '':
-            # New image uploaded
-            image_data = image_file.read()
-            cur.execute(
-                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = NULL, image_data = %s, created_at = CURRENT_TIMESTAMP WHERE id = %s',
-                (title, author, content, image_data, article_id)
-            )
+            if allowed_file(image_file.filename):
+                image_data = image_file.read()
+                image_mime_type = image_file.mimetype
+                cur.execute(
+                    'UPDATE articles SET title = %s, author = %s, content = %s, image_url = NULL, image_data = %s, image_mime_type = %s, created_at = CURRENT_TIMESTAMP WHERE id = %s',
+                    (title, author, content, image_data, image_mime_type, article_id)
+                )
+            else:
+                flash('Invalid image file type. Allowed types are png, jpg, jpeg, gif.', 'error')
+                return redirect(url_for('edit_article', article_id=article_id))
         elif image_url:
             # New image URL provided
             cur.execute(
-                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = %s, image_data = NULL, created_at = CURRENT_TIMESTAMP WHERE id = %s',
+                'UPDATE articles SET title = %s, author = %s, content = %s, image_url = %s, image_data = NULL, image_mime_type = NULL, created_at = CURRENT_TIMESTAMP WHERE id = %s',
                 (title, author, content, image_url, article_id)
             )
         else:
