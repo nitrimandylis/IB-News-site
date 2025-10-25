@@ -62,7 +62,7 @@
         </aside>
 
         <!-- Results Area -->
-        <main class="results-area">
+        <main class="results-area search-results">
             <!-- Active Filters Display -->
             <div class="active-filters" id="activeFilters">
                 {% for tag in selected_tags %}
@@ -85,25 +85,44 @@
                 {% endif %}
             </div>
 
-            <!-- Sample Article Cards -->
             {% for article in articles %}
             <article class="article-card">
-                <h3 class="article-title">
-                    <a href="{{ url_for('article', article_id=article.id) }}">{{ article.title }}</a>
-                </h3>
-                <div class="article-meta">
-                    <span>📝 {{ article.author }}</span>
-                    <span>•</span>
-                    <span>📅 {{ article.created_at.strftime('%b %d, %Y') }}</span>
-                    {% if article.tags %}
-                    <span>•</span>
-                    <span class="article-tag">{{ article.tags[0] }}</span>
-                    {% endif %}
+                <div class="article-content">
+                    <div class="article-header">
+                        {% if article.tags %}
+                        <span class="article-category category-student">{{ article.tags[0] }}</span>
+                        {% endif %}
+                        <h2 class="article-title">
+                            <a href="{{ url_for('article', article_id=article.id) }}">{{ article.title }}</a>
+                        </h2>
+                        <p class="article-excerpt">
+                            {{ article.content | truncate(150) }}
+                        </p>
+                    </div>
+                    <footer class="article-footer">
+                        <div class="article-meta">
+                            <span class="meta-item">
+                                <span class="meta-icon">✍️</span>
+                                <span class="author-name">{{ article.author }}</span>
+                            </span>
+                            <span class="meta-item">
+                                <span class="meta-icon">📅</span>
+                                <span>{{ article.created_at.strftime('%b %d, %Y') }}</span>
+                            </span>
+                        </div>
+                        <div class="read-time">
+                            <span>📖</span>
+                            <span>5 min read</span>
+                        </div>
+                    </footer>
                 </div>
-                <p class="article-excerpt">
-                    {{ article.content | truncate(150) }}
-                </p>
             </article>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">🔍</div>
+                <h3 class="empty-state-title">No articles found</h3>
+                <p class="empty-state-text">Try adjusting your filters or search terms</p>
+            </div>
             {% endfor %}
         </main>
     </div>

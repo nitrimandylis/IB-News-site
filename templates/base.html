@@ -52,8 +52,8 @@
                         </ul>
                     </nav>
                     <form action="{{ url_for('search') }}" method="get" class="search-form">
-                        <input type="search" name="query" placeholder="Search..." />
-                        <button type="submit">Search</button>
+                        <input type="search" name="query" placeholder="Search articles..." />
+                        <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
                     </form>
                     <button
                         id="burger-menu"
