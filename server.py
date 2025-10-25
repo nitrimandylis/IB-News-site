@@ -140,7 +140,8 @@ def about():
 @app.route('/search')
 def search():
     query = request.args.get('query', '')
-    selected_tags = request.args.getlist('tags')
+    selected_tags_str = request.args.get('tags', '')
+    selected_tags = selected_tags_str.split(',') if selected_tags_str else []
     selected_authors = request.args.getlist('authors')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')

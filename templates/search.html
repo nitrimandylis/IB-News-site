@@ -3,54 +3,151 @@
 {% block title %}Search Results{% endblock %}
 
 {% block content %}
-<div class="search-results">
-    <h1>Search Results</h1>
+<div class="search-container">
+    <div class="search-header">
+        <h1>Search Results</h1>
+        <p class="results-count">Found {{ articles|length }} articles</p>
+    </div>
 
-    <form method="get" action="{{ url_for('search') }}" class="filters">
-        <input type="search" name="query" placeholder="Search..." value="{{ query }}">
-        
-        <div class="filter-group">
-            <label for="tags">Tags</label>
-            <select name="tags" id="tags" multiple>
-                {% for tag in all_tags %}
-                    <option value="{{ tag }}" {% if tag in selected_tags %}selected{% endif %}>{{ tag }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <label for="authors">Authors</label>
-            <select name="authors" id="authors" multiple>
-                {% for author in all_authors %}
-                    <option value="{{ author }}" {% if author in selected_authors %}selected{% endif %}>{{ author }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <label for="start_date">Start Date</label>
-            <input type="date" name="start_date" id="start_date" value="{{ start_date }}">
-        </div>
-
-        <div class="filter-group">
-            <label for="end_date">End Date</label>
-            <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
-        </div>
-
-        <button type="submit">Filter</button>
-    </form>
-
-    <div class="results">
-        {% if articles %}
-            {% for article in articles %}
-                <div class="article-summary">
-                    <h2><a href="{{ url_for('article', article_id=article.id) }}">{{ article.title }}</a></h2>
-                    <p>{{ article.content | truncate(150) }}</p>
+    <div class="search-layout">
+        <!-- Filters Sidebar -->
+        <aside class="filters-sidebar">
+            <form method="get" action="{{ url_for('search') }}">
+                <div class="filters-header">
+                    <h2 class="filters-title">Filters</h2>
+                    <a href="{{ url_for('search') }}" class="clear-filters">Clear all</a>
                 </div>
+
+                <!-- Tags Filter -->
+                <div class="filter-section">
+                    <label class="filter-label">Tags</label>
+                    <div class="tag-chips">
+                        {% for tag in all_tags %}
+                        <span class="tag-chip {% if tag in selected_tags %}active{% endif %}" onclick="toggleTag(this)">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="tags" id="selected-tags-input" value="{{ selected_tags|join(',') }}">
+                </div>
+
+                <!-- Authors Filter -->
+                <div class="filter-section">
+                    <label class="filter-label">Authors</label>
+                    <div class="author-options">
+                        {% for author in all_authors %}
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" name="authors" value="{{ author }}" {% if author in selected_authors %}checked{% endif %}>
+                            <span class="checkbox-label">{{ author }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Date Range Filter -->
+                <div class="filter-section">
+                    <label class="filter-label">Date Range</label>
+                    <div class="date-group">
+                        <div class="date-input-wrapper">
+                            <label class="date-label-small">From</label>
+                            <input type="date" name="start_date" id="startDate" value="{{ start_date }}">
+                        </div>
+                        <div class="date-input-wrapper">
+                            <label class="date-label-small">To</label>
+                            <input type="date" name="end_date" id="endDate" value="{{ end_date }}">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="apply-filters-btn" type="submit">Apply Filters</button>
+            </form>
+        </aside>
+
+        <!-- Results Area -->
+        <main class="results-area">
+            <!-- Active Filters Display -->
+            <div class="active-filters" id="activeFilters">
+                {% for tag in selected_tags %}
+                <div class="active-filter-chip" data-type="tag">
+                    <span>{{ tag }}</span>
+                    <button class="remove-filter" onclick="removeFilter(this)">×</button>
+                </div>
+                {% endfor %}
+                {% for author in selected_authors %}
+                <div class="active-filter-chip" data-type="author">
+                    <span>{{ author }}</span>
+                    <button class="remove-filter" onclick="removeFilter(this)">×</button>
+                </div>
+                {% endfor %}
+                {% if start_date and end_date %}
+                <div class="active-filter-chip" data-type="date">
+                    <span>{{ start_date }} - {{ end_date }}</span>
+                    <button class="remove-filter" onclick="removeFilter(this)">×</button>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Sample Article Cards -->
+            {% for article in articles %}
+            <article class="article-card">
+                <h3 class="article-title">
+                    <a href="{{ url_for('article', article_id=article.id) }}">{{ article.title }}</a>
+                </h3>
+                <div class="article-meta">
+                    <span>📝 {{ article.author }}</span>
+                    <span>•</span>
+                    <span>📅 {{ article.created_at.strftime('%b %d, %Y') }}</span>
+                    {% if article.tags %}
+                    <span>•</span>
+                    <span class="article-tag">{{ article.tags[0] }}</span>
+                    {% endif %}
+                </div>
+                <p class="article-excerpt">
+                    {{ article.content | truncate(150) }}
+                </p>
+            </article>
             {% endfor %}
-        {% else %}
-            <p>No articles found.</p>
-        {% endif %}
+        </main>
     </div>
 </div>
+
+<script>
+    function toggleTag(element) {
+        element.classList.toggle('active');
+        updateSelectedTagsInput();
+    }
+
+    function updateSelectedTagsInput() {
+        const activeTags = Array.from(document.querySelectorAll('.tag-chip.active'))
+            .map(chip => chip.textContent);
+        document.getElementById('selected-tags-input').value = activeTags.join(',');
+    }
+
+    function removeFilter(button) {
+        const chip = button.closest('.active-filter-chip');
+        const type = chip.getAttribute('data-type');
+        const text = chip.querySelector('span').textContent;
+
+        chip.remove();
+
+        if (type === 'tag') {
+            const tagChip = Array.from(document.querySelectorAll('.tag-chip'))
+                .find(el => el.textContent === text);
+            if (tagChip) {
+                tagChip.classList.remove('active');
+                updateSelectedTagsInput();
+            }
+        } else if (type === 'author') {
+            const checkbox = Array.from(document.querySelectorAll('.checkbox-label'))
+                .find(el => el.textContent === text)
+                ?.previousElementSibling;
+            if (checkbox) checkbox.checked = false;
+        } else if (type === 'date') {
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+        }
+        
+        // Automatically resubmit the form
+        document.querySelector('.filters-sidebar form').submit();
+    }
+</script>
 {% endblock %}
+
