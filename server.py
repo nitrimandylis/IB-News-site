@@ -137,6 +137,86 @@ def get_image(article_id):
 def about():
     return render_template('about.html')
 
+@app.route('/search')
+def search():
+    query = request.args.get('query', '')
+    selected_tags = request.args.getlist('tags')
+    selected_authors = request.args.getlist('authors')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+
+    conn = get_db()
+    if conn is None:
+        return render_template('search.html', articles=[], query=query, tags=[], authors=[])
+
+    cur = conn.cursor()
+
+    # Fetch all tags and authors for filter dropdowns
+    cur.execute('SELECT DISTINCT name FROM tags ORDER BY name')
+    all_tags = [row[0] for row in cur.fetchall()]
+    cur.execute('SELECT DISTINCT author FROM articles ORDER BY author')
+    all_authors = [row[0] for row in cur.fetchall()]
+
+    # Base query
+    sql = '''
+        SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
+               STRING_AGG(t.name, ',')
+        FROM articles a
+        LEFT JOIN article_tags at ON a.id = at.article_id
+        LEFT JOIN tags t ON at.tag_id = t.id
+    '''
+    where_clauses = []
+    params = []
+
+    if query:
+        where_clauses.append('(a.title ILIKE %s OR a.author ILIKE %s OR a.content ILIKE %s)')
+        search_term = f"%{query}%"
+        params.extend([search_term, search_term, search_term])
+
+    if selected_tags:
+        where_clauses.append('a.id IN (SELECT article_id FROM article_tags WHERE tag_id IN (SELECT id FROM tags WHERE name = ANY(%s)))')
+        params.append(selected_tags)
+
+    if selected_authors:
+        where_clauses.append('a.author = ANY(%s)')
+        params.append(selected_authors)
+
+    if start_date:
+        where_clauses.append('a.created_at >= %s')
+        params.append(start_date)
+
+    if end_date:
+        where_clauses.append('a.created_at <= %s')
+        params.append(end_date)
+
+    if where_clauses:
+        sql += ' WHERE ' + ' AND '.join(where_clauses)
+
+    sql += ' GROUP BY a.id ORDER BY a.created_at DESC'
+
+    cur.execute(sql, tuple(params))
+    articles = cur.fetchall()
+    cur.close()
+
+    articles_dict = []
+    for article in articles:
+        articles_dict.append({
+            'id': article[0],
+            'title': article[1],
+            'author': article[2],
+            'content': article[3],
+            'image_url': article[4],
+            'created_at': article[5],
+            'has_image': article[6],
+            'tags': article[7].split(',') if article[7] else []
+        })
+
+    return render_template('search.html', articles=articles_dict, query=query, 
+                           all_tags=all_tags, all_authors=all_authors,
+                           selected_tags=selected_tags, selected_authors=selected_authors,
+                           start_date=start_date, end_date=end_date)
+
+
 # --- Admin Routes ---
 
 @app.route('/login', methods=['GET', 'POST'])

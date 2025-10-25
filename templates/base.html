@@ -51,6 +51,10 @@
                             {% endif %}
                         </ul>
                     </nav>
+                    <form action="{{ url_for('search') }}" method="get" class="search-form">
+                        <input type="search" name="query" placeholder="Search..." />
+                        <button type="submit">Search</button>
+                    </form>
                     <button
                         id="burger-menu"
                         class="burger-button"

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="search-results">
+    <h1>Search Results</h1>
+
+    <form method="get" action="{{ url_for('search') }}" class="filters">
+        <input type="search" name="query" placeholder="Search..." value="{{ query }}">
+        
+        <div class="filter-group">
+            <label for="tags">Tags</label>
+            <select name="tags" id="tags" multiple>
+                {% for tag in all_tags %}
+                    <option value="{{ tag }}" {% if tag in selected_tags %}selected{% endif %}>{{ tag }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="authors">Authors</label>
+            <select name="authors" id="authors" multiple>
+                {% for author in all_authors %}
+                    <option value="{{ author }}" {% if author in selected_authors %}selected{% endif %}>{{ author }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="start_date">Start Date</label>
+            <input type="date" name="start_date" id="start_date" value="{{ start_date }}">
+        </div>
+
+        <div class="filter-group">
+            <label for="end_date">End Date</label>
+            <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
+        </div>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <div class="results">
+        {% if articles %}
+            {% for article in articles %}
+                <div class="article-summary">
+                    <h2><a href="{{ url_for('article', article_id=article.id) }}">{{ article.title }}</a></h2>
+                    <p>{{ article.content | truncate(150) }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No articles found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
