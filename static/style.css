@@ -216,97 +216,38 @@ a:hover {
 
 .article-tags {
   display: flex;
-  gap: 16px;
-  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
 .tag {
   display: inline-block;
-  padding: 0.6em 1.6em;
-  font-size: 1.3em;
-  border-radius: 26px;
+  padding: 0.55em 1.28em;
+  font-size: 1.16em;
+  border-radius: 2em;
   font-weight: 500;
+  letter-spacing: 0.5px;
+  background: #ececec;
   color: #222;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-  background: #eee;
-  transition: background 0.2s;
-  letter-spacing: 1px;
+  box-shadow: 0 2px 7px rgba(0,0,0,0.04);
+  transition: background 0.18s, box-shadow 0.18s;
   user-select: none;
 }
 
-.tag.tag-gray {
-  background: #dedede;
-  color: #222;
-}
+/* Unique tag colors */
+.tag-ad         { background-color: #bdbdbd; color: #333; }
+.tag-arts       { background-color: #b1aaff; color: #34228c; }
+.tag-business   { background-color: #7CFF98; color: #134d25; }
+.tag-student    { background-color: #ff7c7c; color: #fff; }
+.tag-opinion    { background-color: #ffd563; color: #735900; }
+.tag-sports     { background-color: #7ecbff; color: #00436d; }
+.tag-life       { background-color: #ffacb9; color: #a52740; }
+.tag-projects   { background-color: #71e4ff; color: #00384e; }
+.tag-volunteer  { background-color: #ffea7c; color: #63531a; }
 
-.tag.tag-amber {
-  background: #FFB300;
-  color: #000000;
-}
-
-.tag.tag-cyan {
-  background: #0FD3FF;
-  color: #000000;
-}
-
-.tag.tag-spring {
-  background: #80FF72;
-  color: #000000;
-}
-
-.tag.tag-coral {
-  background: #FF6B6B;
-  color: #FFFFFF;
-}
-
-.tag.tag-mint {
-  background: #00FFA3;
-  color: #000000;
-}
-
-.tag.tag-orange {
-  background: #FF5E00;
-  color: #FFFFFF;
-}
-
-.tag.tag-violet {
-  background: #7A5CFF;
-  color: #FFFFFF;
-}
-
-.tag.tag-sky {
-  background: #00C2FF;
-  color: #000000;
-}
-
-.tag.tag-apricot {
-  background: #FFA552;
-  color: #000000;
-}
-
-.tag.tag-neon-green {
-  background: #39FF14;
-  color: #000000;
-}
-
-.tag.tag-magenta {
-  background: #FF00A8;
-  color: #FFFFFF;
-}
-
-.tag.tag-yellow {
-  background: #FFD300;
-  color: #000000;
-}
-
-.tag.tag-aqua {
-  background: #00F0FF;
-  color: #000000;
-}
-
-.tag.tag-rose {
-  background: #FF3D7F;
-  color: #FFFFFF;
+.tag:hover {
+  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+  filter: brightness(1.04);
 }
 
 .card-content h3 {
