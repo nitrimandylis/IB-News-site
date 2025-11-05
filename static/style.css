@@ -1239,6 +1239,12 @@ textarea {
 .search-results .category-science { background-color: #d1fae5; color: #065f46; }
 .search-results .category-sports { background-color: #fef2f2; color: #991b1b; }
 
+.tag-academics { background-color: #dbeafe; color: #1e40af; }
+.tag-sports { background-color: #fef2f2; color: #991b1b; }
+.tag-student-life { background-color: #d1fae5; color: #065f46; }
+.tag-college-counseling { background-color: #f3e8ff; color: #6b21a8; }
+.tag-arts { background-color: #fef3c7; color: #92400e; }
+
 .search-results .article-title {
     font-size: 22px;
     font-weight: 700;
