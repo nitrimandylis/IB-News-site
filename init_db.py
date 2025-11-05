@@ -8,7 +8,10 @@ load_dotenv()
 # after the first run. It creates the table if it doesn't exist, and only adds
 # seed data if the table is empty.
 
-DATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if not DATABASE_URL:
+    print("FATAL: DATABASE_URL environment variable not set.")
+    exit(1)
 if DATABASE_URL.startswith("https://"):
     DATABASE_URL = DATABASE_URL.replace('https://', 'postgresql://')
 

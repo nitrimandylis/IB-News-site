@@ -28,11 +28,15 @@ users = {
 def get_db():
     if 'db' not in g:
         try:
-            DATABASE_URL = os.environ['DATABASE_URL']
+            DATABASE_URL = os.environ.get('DATABASE_URL')
+            if not DATABASE_URL:
+                app.logger.error("DATABASE_URL is not set.")
+                return None
             if DATABASE_URL.startswith("https://"):
                 DATABASE_URL = DATABASE_URL.replace('https://', 'postgresql://')
             g.db = psycopg2.connect(DATABASE_URL)
-        except psycopg2.OperationalError:
+        except psycopg2.OperationalError as e:
+            app.logger.error(f"Failed to connect to the database: {e}")
             return None
     return g.db
 
