@@ -11,11 +11,9 @@
         </div>
         <div class="hero-text">
             <div>
-            <div class="article-tags">
             {% for tag in articles[0].tags %}
-                <span class="tag {{ tag|get_tag_class }}">{{ tag }}</span>
+                <span class="article-category {{ tag|get_tag_class }}">{{ tag }}</span>
             {% endfor %}
-            </div>
         </div>
             <h1>{{ articles[0]['title'] }}</h1>
             <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'].strftime('%Y-%m-%d') }}</p>
@@ -36,11 +34,9 @@
             <div class="card-image-placeholder" style="background-image: url('{% if article.has_image %}{{ url_for('get_image', article_id=article.id) }}{% else %}{{ article.image_url }}{% endif %}');"></div>
             <div class="card-content">
                 <div>
-                    <div class="article-tags">
                     {% for tag in article.tags %}
-                        <span class="tag {{ tag|get_tag_class }}">{{ tag }}</span>
+                        <span class="article-category {{ tag|get_tag_class }}">{{ tag }}</span>
                     {% endfor %}
-                    </div>
                 </div>
                 <h3>{{ article['title'] }}</h3>
                 <p class="article-meta">By {{ article['author'] }} | {{ article['created_at'].strftime('%Y-%m-%d') }}</p>

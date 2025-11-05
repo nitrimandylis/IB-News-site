@@ -214,41 +214,29 @@ a:hover {
     padding: 1.5rem;
 }
 
-.article-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
+.article-category {
+    display: inline-block;
+    padding: 5px 12px;
+    background-color: #eff6ff;
+    color: #1e40af;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    margin-bottom: 12px;
 }
 
-.tag {
-  display: inline-block;
-  padding: 0.55em 1.28em;
-  font-size: 1.16em;
-  border-radius: 2em;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  background: #ececec;
-  color: #222;
-  box-shadow: 0 2px 7px rgba(0,0,0,0.04);
-  transition: background 0.18s, box-shadow 0.18s;
-  user-select: none;
-}
-
-/* Unique tag colors */
-.tag-ad         { background-color: #bdbdbd; color: #333; }
-.tag-arts       { background-color: #b1aaff; color: #34228c; }
-.tag-business   { background-color: #7CFF98; color: #134d25; }
-.tag-student    { background-color: #ff7c7c; color: #fff; }
-.tag-opinion    { background-color: #ffd563; color: #735900; }
-.tag-sports     { background-color: #7ecbff; color: #00436d; }
-.tag-life       { background-color: #ffacb9; color: #a52740; }
-.tag-projects   { background-color: #71e4ff; color: #00384e; }
-.tag-volunteer  { background-color: #ffea7c; color: #63531a; }
-
-.tag:hover {
-  box-shadow: 0 4px 14px rgba(0,0,0,0.10);
-  filter: brightness(1.04);
-}
+.category-business { background-color: #fef3c7; color: #92400e; }
+.category-student { background-color: #dbeafe; color: #1e40af; }
+.category-opinion { background-color: #fce7f3; color: #9f1239; }
+.category-arts { background-color: #f3e8ff; color: #6b21a8; }
+.category-science { background-color: #d1fae5; color: #065f46; }
+.category-sports { background-color: #fef2f2; color: #991b1b; }
+.category-ad { background-color: #FFB300; color: #000000; }
+.category-events { background-color: #FFD300; color: #000000; }
+.category-tech { background-color: #00F0FF; color: #000000; }
+.category-wellness { background-color: #FF3D7F; color: #FFFFFF; }
 
 .card-content h3 {
     margin: 0.5rem 0;

@@ -19,15 +19,20 @@ TAG_COLOR_PALETTE = {
 }
 
 TAG_CLASS_MAP = {
-    '#ad': 'tag-ad',
-    'Arts': 'tag-arts',
-    'Business': 'tag-business',
-    'For The Student': 'tag-student',
-    'Opinion': 'tag-opinion',
-    'Sports': 'tag-sports',
-    'Student Life': 'tag-life',
-    'Student Projects': 'tag-projects',
-    'Volunteering-CAS': 'tag-volunteer',
+    '#ad': 'category-ad',
+    'Arts': 'category-arts',
+    'Business': 'category-business',
+    'For The Student': 'category-student',
+    'Opinion': 'category-opinion',
+    'Sports': 'category-sports',
+    'Student Life': 'category-student',
+    'Student Projects': 'category-student',
+    'Volunteering-CAS': 'category-student',
+    'Science': 'category-science',
+    'Editorial': 'category-opinion',
+    'Events': 'category-events',
+    'Tech': 'category-tech',
+    'Wellness': 'category-wellness',
 }
 
 def get_tag_color(tag_name):
