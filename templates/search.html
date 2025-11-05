@@ -23,7 +23,7 @@
                     <label class="filter-label">Tags</label>
                     <div class="tag-chips">
                         {% for tag in all_tags %}
-                        <span class="tag-chip {% if tag in selected_tags %}active{% endif %}" onclick="toggleTag(this)">{{ tag }}</span>
+                        <span class="tag-chip {% if tag in selected_tags %}active{% endif %}" onclick="toggleTag(this)" style="background-color: {{ tag|hash_to_color }}; color: {{ tag|hash_to_color|get_text_color }}">{{ tag }}</span>
                         {% endfor %}
                     </div>
                     <input type="hidden" name="tags" id="selected-tags-input" value="{{ selected_tags|join(',') }}">
