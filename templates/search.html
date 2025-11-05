@@ -23,7 +23,7 @@
                     <label class="filter-label">Tags</label>
                     <div class="tag-chips">
                         {% for tag in all_tags %}
-                        <span class="tag-chip {% if tag in selected_tags %}active{% endif %}" onclick="toggleTag(this)" style="background-color: {{ tag|get_tag_color }}; color: {{ tag|get_text_color_for_tag }}">{{ tag }}</span>
+                        <span class="tag-chip {% if tag in selected_tags %}active{% endif %} {{ tag|get_tag_class }}" onclick="toggleTag(this)">{{ tag }}</span>
                         {% endfor %}
                     </div>
                     <input type="hidden" name="tags" id="selected-tags-input" value="{{ selected_tags|join(',') }}">
@@ -89,9 +89,11 @@
             <article class="article-card">
                 <div class="article-content">
                     <div class="article-header">
+                        <div class="article-tags">
                         {% for tag in article.tags %}
-                            <span class="category-tag" style="background-color: {{ tag|get_tag_color }}; color: {{ tag|get_text_color_for_tag }}">{{ tag }}</span>
+                            <span class="tag {{ tag|get_tag_class }}">{{ tag }}</span>
                         {% endfor %}
+                        </div>
                         <h2 class="article-title">
                             <a href="{{ url_for('article', article_id=article.id) }}">{{ article.title }}</a>
                         </h2>

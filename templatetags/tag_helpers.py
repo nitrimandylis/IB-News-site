@@ -18,6 +18,23 @@ TAG_COLOR_PALETTE = {
     'Wellness': ('#FF3D7F', '#FFFFFF'),
 }
 
+TAG_CLASS_MAP = {
+    'ad': 'tag-amber',
+    'Arts': 'tag-cyan',
+    'Business': 'tag-spring',
+    'For The Student': 'tag-coral',
+    'Opinion': 'tag-mint',
+    'Sports': 'tag-orange',
+    'Student Life': 'tag-violet',
+    'Student Projects': 'tag-sky',
+    'Volunteering-CAS': 'tag-apricot',
+    'Science': 'tag-neon-green',
+    'Editorial': 'tag-magenta',
+    'Events': 'tag-yellow',
+    'Tech': 'tag-aqua',
+    'Wellness': 'tag-rose',
+}
+
 def get_tag_color(tag_name):
     """
     Takes a string (tag_name) and returns the corresponding color from the palette.
@@ -29,3 +46,9 @@ def get_text_color_for_tag(tag_name):
     Takes a string (tag_name) and returns the corresponding text color from the palette.
     """
     return TAG_COLOR_PALETTE.get(tag_name, ('#DDDDDD', '#000000'))[1]
+
+def get_tag_class(tag_name):
+    """
+    Takes a string (tag_name) and returns the corresponding CSS class from the map.
+    """
+    return TAG_CLASS_MAP.get(tag_name, 'tag-gray')

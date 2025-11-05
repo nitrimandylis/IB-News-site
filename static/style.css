@@ -214,21 +214,99 @@ a:hover {
     padding: 1.5rem;
 }
 
-.category-tag {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 15px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin: 0 5px 5px 0;
+.article-tags {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
-.category-tag:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.1);
+.tag {
+  display: inline-block;
+  padding: 0.6em 1.6em;
+  font-size: 1.3em;
+  border-radius: 26px;
+  font-weight: 500;
+  color: #222;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  background: #eee;
+  transition: background 0.2s;
+  letter-spacing: 1px;
+  user-select: none;
+}
+
+.tag.tag-gray {
+  background: #dedede;
+  color: #222;
+}
+
+.tag.tag-amber {
+  background: #FFB300;
+  color: #000000;
+}
+
+.tag.tag-cyan {
+  background: #0FD3FF;
+  color: #000000;
+}
+
+.tag.tag-spring {
+  background: #80FF72;
+  color: #000000;
+}
+
+.tag.tag-coral {
+  background: #FF6B6B;
+  color: #FFFFFF;
+}
+
+.tag.tag-mint {
+  background: #00FFA3;
+  color: #000000;
+}
+
+.tag.tag-orange {
+  background: #FF5E00;
+  color: #FFFFFF;
+}
+
+.tag.tag-violet {
+  background: #7A5CFF;
+  color: #FFFFFF;
+}
+
+.tag.tag-sky {
+  background: #00C2FF;
+  color: #000000;
+}
+
+.tag.tag-apricot {
+  background: #FFA552;
+  color: #000000;
+}
+
+.tag.tag-neon-green {
+  background: #39FF14;
+  color: #000000;
+}
+
+.tag.tag-magenta {
+  background: #FF00A8;
+  color: #FFFFFF;
+}
+
+.tag.tag-yellow {
+  background: #FFD300;
+  color: #000000;
+}
+
+.tag.tag-aqua {
+  background: #00F0FF;
+  color: #000000;
+}
+
+.tag.tag-rose {
+  background: #FF3D7F;
+  color: #FFFFFF;
 }
 
 .card-content h3 {
