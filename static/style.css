@@ -237,6 +237,10 @@ a:hover {
 .category-events { background-color: #FFD300; color: #000000; }
 .category-tech { background-color: #00F0FF; color: #000000; }
 .category-wellness { background-color: #FF3D7F; color: #FFFFFF; }
+.category-life { background-color: #7A5CFF; color: #FFFFFF; }
+.category-projects { background-color: #00C2FF; color: #000000; }
+.category-cas { background-color: #FFA552; color: #000000; }
+.category-editorial { background-color: #FF00A8; color: #FFFFFF; }
 
 .card-content h3 {
     margin: 0.5rem 0;
