@@ -1,9 +1,7 @@
 # templatetags/tag_helpers.py
 
 import hashlib
-from django import template
 
-register = template.Library()
 
 # 🎨 You can customize this list with your own accessible hex color codes.
 # I've chosen a set of 12 distinct, modern colors.
@@ -22,7 +20,6 @@ TAG_COLOR_PALETTE = [
     '#2A9D8F',  # Teal
 ]
 
-@register.filter(name='hash_to_color')
 def hash_to_color(tag_name):
     """
     Takes a string (tag_name) and deterministically picks a color 
@@ -40,7 +37,6 @@ def hash_to_color(tag_name):
     
     return TAG_COLOR_PALETTE[color_index]
 
-@register.filter(name='get_text_color')
 def get_text_color(bg_hex):
     """
     Takes a background hex color and returns either '#000000' (black) 

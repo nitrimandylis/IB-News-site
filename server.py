@@ -11,6 +11,12 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+from templatetags.tag_helpers import hash_to_color, get_text_color
+
+# Register custom Jinja2 filters
+app.jinja_env.filters['hash_to_color'] = hash_to_color
+app.jinja_env.filters['get_text_color'] = get_text_color
+
 # --- Image Upload Settings ---
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 

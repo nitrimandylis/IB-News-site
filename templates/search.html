@@ -89,9 +89,9 @@
             <article class="article-card">
                 <div class="article-content">
                     <div class="article-header">
-                        {% if article.tags %}
-                        <span class="article-category tag-{{ article.tags[0].lower().replace(' ', '-') }}">{{ article.tags[0] }}</span>
-                        {% endif %}
+                        {% for tag in article.tags %}
+                            <span class="category-tag" style="background-color: {{ tag|hash_to_color }}; color: {{ tag|hash_to_color|get_text_color }}">{{ tag }}</span>
+                        {% endfor %}
                         <h2 class="article-title">
                             <a href="{{ url_for('article', article_id=article.id) }}">{{ article.title }}</a>
                         </h2>
