@@ -1,0 +1,16 @@
+name: Prevent Supabase Inactivity
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Runs every Sunday at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make an API request to Supabase
+        run: |
+          curl -X GET "https://bqvlbwgnatlonibkzgqe.supabase.co/rest/v1/articles" \
+          -H "apikey: ${{ secrets.SUPABASE_API_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}"
