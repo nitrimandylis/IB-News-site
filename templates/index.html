@@ -1,62 +1,53 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="home-grid">
-    <main class="main-content">
-        {% if articles %}
-        <section class="hero-section">
-            <div class="hero-article">
-                <div class="hero-image">
-                    <img src="{% if articles[0].has_image %}{{ url_for('get_image', article_id=articles[0].id) }}{% else %}{{ articles[0].image_url }}{% endif %}" alt="Featured Article Image">
-                </div>
-                <div class="hero-text">
-                    <div>
-                    {% for tag in articles[0].tags %}
+<!-- Hero Section - Displays the most recent article -->
+
+
+{% if articles %}
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-image">
+            <img src="{% if articles[0].has_image %}{{ url_for('get_image', article_id=articles[0].id) }}{% else %}{{ articles[0].image_url }}{% endif %}" alt="Featured Article Image">
+        </div>
+        <div class="hero-text">
+            <div>
+            {% for tag in articles[0].tags %}
+                <span class="article-category {{ tag|get_tag_class }}">{{ tag }}</span>
+            {% endfor %}
+        </div>
+            <h1>{{ articles[0]['title'] }}</h1>
+            <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'].strftime('%Y-%m-%d') }}</p>
+            <p class="hero-excerpt">{{ articles[0]['content'][:150] }}...</p> {# Show a preview of the content #}
+            <a href="{{ url_for('article', article_id=articles[0]['id']) }}" class="read-more-btn">Read Full Story &rarr;</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Latest Articles Grid -->
+<section id="articles" class="article-grid-section">
+    <h2>Latest Articles</h2>
+    <div class="article-grid">
+        <!-- Loop through articles, skipping the first one which is in the hero -->
+        {% for article in articles[1:] %}
+        <a href="{{ url_for('article', article_id=article['id']) }}" class="article-card">
+            <div class="card-image-placeholder" style="background-image: url('{% if article.has_image %}{{ url_for('get_image', article_id=article.id) }}{% else %}{{ article.image_url }}{% endif %}');"></div>
+            <div class="card-content">
+                <div>
+                    {% for tag in article.tags %}
                         <span class="article-category {{ tag|get_tag_class }}">{{ tag }}</span>
                     {% endfor %}
-                    </div>
-                    <h1>{{ articles[0]['title'] }}</h1>
-                    <p class="article-meta">By {{ articles[0]['author'] }} | {{ articles[0]['created_at'].strftime('%Y-%m-%d') }}</p>
-                    <p class="hero-excerpt">{{ articles[0]['content'][:150] }}...</p>
-                    <a href="{{ url_for('article', article_id=articles[0]['id']) }}" class="read-more-btn">Read Full Story &rarr;</a>
                 </div>
+                <h3>{{ article['title'] }}</h3>
+                <p class="article-meta">By {{ article['author'] }} | {{ article['created_at'].strftime('%Y-%m-%d') }}</p>
+                <span class="read-more-link">Read More &rarr;</span>
             </div>
-        </section>
-        {% endif %}
+        </a>
+        {% else %}
+        <p>No articles found. Check back later!</p>
+        {% endfor %}
+    </div>
+</section>
 
-        <section id="articles" class="article-grid-section">
-            <div class="article-grid">
-                {% for article in articles[1:5] %}
-                <a href="{{ url_for('article', article_id=article['id']) }}" class="article-card">
-                    <div class="card-image-placeholder" style="background-image: url('{% if article.has_image %}{{ url_for('get_image', article_id=article.id) }}{% else %}{{ article.image_url }}{% endif %}');"></div>
-                    <div class="card-content">
-                        <div>
-                            {% for tag in article.tags %}
-                                <span class="article-category {{ tag|get_tag_class }}">{{ tag }}</span>
-                            {% endfor %}
-                        </div>
-                        <h3>{{ article['title'] }}</h3>
-                        <p class="article-meta">By {{ article['author'] }} | {{ article['created_at'].strftime('%Y-%m-%d') }}</p>
-                        <span class="read-more-link">Read More &rarr;</span>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
-        </section>
-    </main>
-    <aside class="sidebar">
-        <section class="recent-articles">
-            <h2>Recent Articles</h2>
-            <ul>
-                {% for article in articles[5:] %}
-                <li>
-                    <a href="{{ url_for('article', article_id=article['id']) }}">
-                        <h4>{{ article['title'] }}</h4>
-                        <p class="article-meta">{{ article['created_at'].strftime('%Y-%m-%d') }}</p>
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </section>
-    </aside>
-</div>
+
 {% endblock %}
