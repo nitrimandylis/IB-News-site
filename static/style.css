@@ -123,32 +123,103 @@ a:hover {
 
 /* --- Hero Section (Beautiful News style) --- */
 .hero-section {
-    background-color: var(--block-bg);
-    padding: 4rem 0;
-    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    width: 100%;
+    min-height: 600px; /* Adjust as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Ensures image doesn't spill out */
+    color: #fff; /* Default text color for hero content */
+}
+
+.hero-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire container */
+    object-position: center;
+    filter: brightness(0.6); /* Darken image for better text contrast */
+    transform: scale(1.0);
+    transition: transform 0.5s ease-in-out;
+}
+
+.hero-image-container:hover .hero-image {
+    transform: scale(1.03); /* Subtle zoom effect on hover */
+}
+
+.hero-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-text); /* Fallback background color */
+    background: linear-gradient(to bottom, #333, #000); /* Dark gradient for placeholder */
 }
 
 .hero-content {
+    position: relative; /* Changed from absolute to relative to stay within flex context */
+    z-index: 2;
+    padding: 2rem;
     text-align: center;
+    max-width: 900px;
 }
 
-.hero-content h1 {
-    font-size: 4rem;
-    margin: 0.5rem 0;
+.hero-content .hero-categories span {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0.2rem;
+    display: inline-block;
+}
+
+.hero-content .hero-title {
+    font-size: 3.5rem; /* Adjusted for better visual hierarchy */
+    margin: 1rem 0;
     line-height: 1.1;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.hero-content .article-meta {
-    font-size: 1rem;
+.hero-content .hero-meta {
+    font-size: 1.1rem;
     margin-bottom: 1.5rem;
-    color: var(--primary-text);
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
-.hero-excerpt {
-    font-size: 1.2rem;
+.hero-content .hero-excerpt {
+    font-size: 1.25rem;
     max-width: 700px;
-    margin: 0 auto 1.5rem auto;
+    margin: 0 auto 2rem auto;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
+
+.hero-section .read-more-btn {
+    background-color: var(--section-green);
+    color: #fff;
+    padding: 0.8rem 1.8rem;
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+}
+
+.hero-section .read-more-btn:hover {
+    background-color: var(--section-blue);
+}
+
+
 
 /* --- Article Grid Section (Broadsheet style) --- */
 .article-grid-section {
