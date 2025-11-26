@@ -1,9 +1,9 @@
 
         /* --- CSS Variables (Design System) --- */
         :root {
-            --bg-primary: #EFEFEF;
-            --bg-surface: #FFFFFF;
-            --bg-search: #EDEAE4;
+            --bg-primary: #F9F6F0;
+            --bg-surface: #FFFCF5;
+            --bg-search: #EFEBE0;
             --text-primary: #251605;
             --text-secondary: #5A5A5A;
             --accent-blue: #4A6378;
@@ -1008,6 +1008,7 @@
     grid-template-columns: 250px 1fr;
     gap: 2rem;
     align-items: center;
+    margin-bottom: 2rem;
 }
 
 .search-results-list .article-card .card-image {
