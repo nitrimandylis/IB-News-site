@@ -76,7 +76,33 @@ def index():
     
     selected_tag = request.args.get('tag')
     
-    # Base query
+    # Fetch the latest article for the hero section
+    cur.execute('''
+        SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
+               STRING_AGG(t.name, ',')
+        FROM articles a
+        LEFT JOIN article_tags at ON a.id = at.article_id
+        LEFT JOIN tags t ON at.tag_id = t.id
+        GROUP BY a.id
+        ORDER BY a.created_at DESC
+        LIMIT 1;
+    ''')
+    hero_article_data = cur.fetchone()
+    
+    hero_article = None
+    if hero_article_data:
+        hero_article = {
+            'id': hero_article_data[0],
+            'title': hero_article_data[1],
+            'author': hero_article_data[2],
+            'content': hero_article_data[3],
+            'image_url': hero_article_data[4],
+            'created_at': hero_article_data[5],
+            'has_image': hero_article_data[6],
+            'tags': hero_article_data[7].split(',') if hero_article_data[7] else []
+        }
+
+    # Base query for the rest of the articles
     sql = '''
         SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
                STRING_AGG(t.name, ',')
@@ -86,6 +112,11 @@ def index():
     '''
     params = []
     where_clauses = []
+
+    # Exclude the hero article from the list
+    if hero_article:
+        where_clauses.append('a.id != %s')
+        params.append(hero_article['id'])
 
     if selected_tag:
         where_clauses.append('a.id IN (SELECT article_id FROM article_tags WHERE tag_id IN (SELECT id FROM tags WHERE name = %s))')
@@ -113,7 +144,7 @@ def index():
             'tags': article[7].split(',') if article[7] else []
         })
 
-    return render_template('index.html', articles=articles_dict, tags=all_tags, selected_tag=selected_tag)
+    return render_template('index.html', hero_article=hero_article, articles=articles_dict, tags=all_tags, selected_tag=selected_tag)
 
 @app.route('/article/<int:article_id>')
 def article(article_id):

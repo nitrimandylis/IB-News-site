@@ -1072,3 +1072,94 @@
     font-size: 1.1rem;
     line-height: 1.8;
 }
+
+/* --- Tag Pill Filters --- */
+.tag-filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+}
+
+.tag-pill {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    background: #F5F5F5;
+    color: #5A5A5A;
+}
+
+.tag-pill:hover {
+    background: #E8E8E8;
+    transform: translateY(-2px);
+}
+
+.tag-pill.active {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+}
+
+.tag-checkbox:checked + span {
+    /* ... styles for the span when checkbox is checked ... */
+}
+
+.tag-pill.active.tag-ad {
+    background: #51E87D;
+    color: #0F5B2D;
+    border-color: #0F5B2D;
+}
+
+.tag-pill.active.tag-business {
+    background: #33D9E8;
+    color: #0A4F5C;
+    border-color: #0A4F5C;
+}
+
+.tag-pill.active.tag-for-the-student {
+    background: #8B5CF6;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+
+.tag-pill.active.tag-arts {
+    background: #D4FF66;
+    color: #3D5C0F;
+    border-color: #3D5C0F;
+}
+
+.tag-pill.active.tag-opinion {
+    background: #FF33E8;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+
+.tag-pill.active.tag-sports {
+    background: #D4FF33;
+    color: #5C6B0F;
+    border-color: #5C6B0F;
+}
+
+.tag-pill.active.tag-student-life {
+    background: #66FF99;
+    color: #0F5C2D;
+    border-color: #0F5C2D;
+}
+
+.tag-pill.active.tag-student-projects {
+    background: #FF9933;
+    color: #5C2D0F;
+    border-color: #5C2D0F;
+}
+
+.tag-pill.active.tag-volunteering-cas {
+    background: #66FF99;
+    color: #0F5C2D;
+    border-color: #0F5C2D;
+}

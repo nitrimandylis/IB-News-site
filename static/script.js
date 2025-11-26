@@ -66,18 +66,104 @@
 
         function updateSelectedTagsInput() {
 
+        
+
             const activeTags = Array.from(document.querySelectorAll('.tag-chip.active'))
+
+        
 
                 .map(chip => chip.textContent);
 
+        
+
             const selectedTagsInput = document.getElementById('selected-tags-input');
+
+        
 
             if (selectedTagsInput) {
 
+        
+
                 selectedTagsInput.value = activeTags.join(',');
+
+        
 
             }
 
+        
+
         }
+
+        
+
+        
+
+        
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+        
+
+            const tagPills = document.querySelectorAll('.tag-pill');
+
+        
+
+            tagPills.forEach(pill => {
+
+        
+
+                const checkbox = pill.querySelector('.tag-checkbox');
+
+        
+
+                if (checkbox) {
+
+        
+
+                    pill.addEventListener('click', () => {
+
+        
+
+                        checkbox.checked = !checkbox.checked;
+
+        
+
+                        pill.classList.toggle('active', checkbox.checked);
+
+        
+
+                    });
+
+        
+
+                    // Set initial state
+
+        
+
+                    if(checkbox.checked) {
+
+        
+
+                        pill.classList.add('active');
+
+        
+
+                    }
+
+        
+
+                }
+
+        
+
+            });
+
+        
+
+        });
+
+        
+
+        
 
         

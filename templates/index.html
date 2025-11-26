@@ -3,14 +3,14 @@
 {% block content %}
 <div class="container">
     <!-- Hero Section -->
-    {% if articles %}
+    {% if hero_article %}
     <section class="hero" aria-label="Featured story">
         <div class="hero-content">
             <div class="hero-image">
-                {% if articles[0].has_image %}
-                    <img src="{{ url_for('get_image', article_id=articles[0].id) }}" alt="{{ articles[0].title }}">
-                {% elif articles[0].image_url %}
-                    <img src="{{ articles[0].image_url }}" alt="{{ articles[0].title }}">
+                {% if hero_article.has_image %}
+                    <img src="{{ url_for('get_image', article_id=hero_article.id) }}" alt="{{ hero_article.title }}">
+                {% elif hero_article.image_url %}
+                    <img src="{{ hero_article.image_url }}" alt="{{ hero_article.title }}">
                 {% else %}
                 <div style="background: linear-gradient(135deg, #4A6378 0%, #0B6B53 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
                     <span style="color: rgba(255,255,255,0.3); font-size: 2rem;">Featured Image</span>
@@ -18,20 +18,21 @@
                 {% endif %}
             </div>
             <div class="hero-body">
-                {% if articles[0].tags %}
+                {% if hero_article.tags %}
                 <div>
-                    {% for tag in articles[0].tags %}
+                    {% for tag in hero_article.tags %}
                         <span class="category-label" style="background-color: {{ tag | get_background_color }}; color: {{ tag | get_text_color }};">{{ tag }}</span>
                     {% endfor %}
                 </div>
                 {% endif %}
-                <h1>{{ articles[0].title }}</h1>
-                <p class="article-meta">By {{ articles[0].author }} | {{ articles[0].created_at.strftime('%B %d, %Y') }}</p>
-                <p class="hero-excerpt">{{ articles[0].content | striptags | truncate(200) }}</p>
-                <a href="{{ url_for('article', article_id=articles[0].id) }}" class="btn-read-more">Read Full Story <span>→</span></a>
+                <h1>{{ hero_article.title }}</h1>
+                <p class="article-meta">By {{ hero_article.author }} | {{ hero_article.created_at.strftime('%B %d, %Y') }}</p>
+                <p class="hero-excerpt">{{ hero_article.content | striptags | truncate(200) }}</p>
+                <a href="{{ url_for('article', article_id=hero_article.id) }}" class="btn-read-more">Read Full Story <span>→</span></a>
             </div>
         </div>
     </section>
+    {% endif %}
 
     <!-- Section Navigation -->
     <nav class="section-nav" aria-label="Article sections">
@@ -44,7 +45,7 @@
     <!-- Latest Articles -->
     <section class="articles-section">
         <div class="article-grid">
-            {% for article in articles[1:] %}
+            {% for article in articles %}
             <a href="{{ url_for('article', article_id=article.id) }}" class="article-card">
                 <div class="card-image">
                     {% if article.has_image %}
@@ -59,7 +60,8 @@
                     {% if article.tags %}
                     <div>
                         {% for tag in article.tags %}
-                                                            <span class="category-label" style="background-color: {{ tag | get_background_color }}; color: {{ tag | get_text_color }};">{{ tag }}</span>                        {% endfor %}
+                                <span class="category-label" style="background-color: {{ tag | get_background_color }}; color: {{ tag | get_text_color }};">{{ tag }}</span>
+                        {% endfor %}
                     </div>
                     {% endif %}
                     <h3>{{ article.title }}</h3>
@@ -71,6 +73,5 @@
             {% endfor %}
         </div>
     </section>
-    {% endif %}
 </div>
 {% endblock %}
