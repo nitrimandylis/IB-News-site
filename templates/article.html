@@ -8,7 +8,7 @@
             {% if article.tags %}
             <div class="article-tags">
                 {% for tag in article.tags %}
-                    <span class="category-label" style="background-color: {{ tag | get_background_color }}; color: {{ tag | get_text_color }};">{{ tag }}</span>
+                    <span class="category-tag {{ tag|get_tag_class }}">{{ tag }}</span>
                 {% endfor %}
             </div>
             {% endif %}

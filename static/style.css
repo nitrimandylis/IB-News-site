@@ -318,6 +318,7 @@
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            padding-left: 2rem;
         }
 
         .category-label {
@@ -1106,6 +1107,39 @@
     border-color: var(--accent-blue);
 }
 
+/* --- Tag Pill Filters --- */
+.tag-filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+}
+
+.tag-pill {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    background: #F5F5F5;
+    color: #5A5A5A;
+}
+
+.tag-pill:hover {
+    background: #E8E8E8;
+    transform: translateY(-2px);
+}
+
+.tag-pill.active {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+}
+
 .tag-checkbox:checked + span {
     /* ... styles for the span when checkbox is checked ... */
 }
@@ -1162,4 +1196,80 @@
     background: #66FF99;
     color: #0F5C2D;
     border-color: #0F5C2D;
+}
+
+/* Base Tag Style */
+.category-tag {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    font-family: var(--font-sans);
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+.category-tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Primary Categories */
+.tag-ad {
+    background: rgba(11, 107, 83, 0.12);
+    color: #0B6B53;
+    border: 1px solid rgba(11, 107, 83, 0.2);
+}
+
+.tag-business {
+    background: rgba(74, 99, 120, 0.12);
+    color: #4A6378;
+    border: 1px solid rgba(74, 99, 120, 0.2);
+}
+
+.tag-for-student {
+    background: rgba(139, 92, 246, 0.12);
+    color: #6B46C1;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+/* Content Categories */
+.tag-arts {
+    background: rgba(184, 134, 11, 0.1);
+    color: #B8860B;
+    border: 1px solid rgba(184, 134, 11, 0.2);
+}
+
+.tag-opinion {
+    background: rgba(68, 13, 15, 0.1);
+    color: #440D0F;
+    border: 1px solid rgba(68, 13, 15, 0.2);
+}
+
+.tag-sports {
+    background: rgba(22, 101, 52, 0.1);
+    color: #166534;
+    border: 1px solid rgba(22, 101, 52, 0.2);
+}
+
+/* Student Activity Categories */
+.tag-student-life {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.tag-student-projects {
+    background: rgba(234, 88, 12, 0.1);
+    color: #EA580C;
+    border: 1px solid rgba(234, 88, 12, 0.2);
+}
+
+.tag-volunteering-cas {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+    border: 1px solid rgba(5, 150, 105, 0.2);
 }
