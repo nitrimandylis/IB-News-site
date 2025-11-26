@@ -1,18 +1,69 @@
 {% extends "base.html" %}
 
-{% block title %}Search Results for "{{ query }}"{% endblock %}
+{% block title %}Search Results{% endblock %}
 
 {% block content %}
-<div class="container search-page-container">
-    <header class="search-header">
+<div class="search-container container">
+    <div class="search-header">
         <h1>Search Results</h1>
-        {% if query %}
-        <p>Showing results for: <strong>"{{ query }}"</strong></p>
-        {% endif %}
-    </header>
+        <p class="results-count">Found {{ articles|length }} articles for "{{query}}"</p>
+    </div>
 
-    <div class="search-results-grid">
-        <div class="article-grid">
+    <div class="search-layout">
+        <!-- Filters Sidebar -->
+        <aside class="filters-sidebar">
+            <form method="get" action="{{ url_for('search') }}">
+                <input type="hidden" name="query" value="{{ query }}">
+                <div class="filters-header">
+                    <h2 class="filters-title">Filters</h2>
+                    <a href="{{ url_for('search', query=query) }}" class="clear-filters">Clear all</a>
+                </div>
+
+                <!-- Tags Filter -->
+                <div class="filter-section">
+                    <label class="filter-label">Tags</label>
+                    <div class="tag-chips">
+                        {% for tag in all_tags %}
+                        <span class="tag-chip {% if tag in selected_tags %}active{% endif %}" onclick="toggleTag(this)">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="tags" id="selected-tags-input" value="{{ selected_tags|join(',') }}">
+                </div>
+
+                <!-- Authors Filter -->
+                <div class="filter-section">
+                    <label class="filter-label">Authors</label>
+                    <div class="author-options">
+                        {% for author in all_authors %}
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" name="authors" value="{{ author }}" {% if author in selected_authors %}checked{% endif %}>
+                            <span class="checkbox-label">{{ author }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Date Range Filter -->
+                <div class="filter-section">
+                    <label class="filter-label">Date Range</label>
+                    <div class="date-group">
+                        <div class="date-input-wrapper">
+                            <label class="date-label-small">From</label>
+                            <input type="date" name="start_date" id="startDate" value="{{ start_date }}">
+                        </div>
+                        <div class="date-input-wrapper">
+                            <label class="date-label-small">To</label>
+                            <input type="date" name="end_date" id="endDate" value="{{ end_date }}">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="apply-filters-btn" type="submit">Apply Filters</button>
+            </form>
+        </aside>
+
+        <!-- Results Area -->
+        <main class="results-area article-grid">
             {% if articles %}
                 {% for article in articles %}
                 <a href="{{ url_for('article', article_id=article.id) }}" class="article-card">
@@ -41,10 +92,10 @@
             {% else %}
                 <div class="no-results">
                     <h2>No articles found.</h2>
-                    <p>Try a different search query or check back later.</p>
+                    <p>Try adjusting your filters or search terms.</p>
                 </div>
             {% endif %}
-        </div>
+        </main>
     </div>
 </div>
 {% endblock %}

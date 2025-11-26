@@ -17,15 +17,68 @@
             });
         });
 
-        // Article card click handler
-        const articleCards = document.querySelectorAll('.article-card');
-        articleCards.forEach(card => {
-            card.addEventListener('click', () => {
-                console.log('Article clicked - navigate to detail view');
-            });
-            card.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    console.log('Article activated via keyboard');
-                }
-            });
-        });
+                // Article card click handler
+
+                const articleCards = document.querySelectorAll('.article-card');
+
+                articleCards.forEach(card => {
+
+                    card.addEventListener('click', () => {
+
+                        const articleLink = card.querySelector('a');
+
+                        if(articleLink) {
+
+                            articleLink.click();
+
+                        }
+
+                    });
+
+                    card.addEventListener('keypress', (e) => {
+
+                        if (e.key === 'Enter' || e.key === ' ') {
+
+                            const articleLink = card.querySelector('a');
+
+                            if(articleLink) {
+
+                                articleLink.click();
+
+                            }
+
+                        }
+
+                    });
+
+                });
+
+        
+
+        function toggleTag(element) {
+
+            element.classList.toggle('active');
+
+            updateSelectedTagsInput();
+
+        }
+
+        
+
+        function updateSelectedTagsInput() {
+
+            const activeTags = Array.from(document.querySelectorAll('.tag-chip.active'))
+
+                .map(chip => chip.textContent);
+
+            const selectedTagsInput = document.getElementById('selected-tags-input');
+
+            if (selectedTagsInput) {
+
+                selectedTagsInput.value = activeTags.join(',');
+
+            }
+
+        }
+
+        
