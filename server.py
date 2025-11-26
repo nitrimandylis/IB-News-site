@@ -11,6 +11,13 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+@app.context_processor
+def inject_current_user():
+    user = session.get('user')
+    if user:
+        return {'current_user': {'is_authenticated': True, 'username': user}}
+    return {'current_user': {'is_authenticated': False}}
+
 from templatetags.tag_helpers import get_tag_color, get_text_color_for_tag, get_tag_class
 
 # Register custom Jinja2 filters
