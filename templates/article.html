@@ -1,34 +1,34 @@
 {% extends "base.html" %}
 {% block title %}{{ article.title }}{% endblock %}
-{% block content %}
-<!-- Reading Progress Bar -->
-<div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
-</div>
 
-<main class="container article-container">
-    <!-- Article content will be dynamically inserted here -->
-    <article class="article-content fade-in">
-        <header class="article-main-header">
-            <h1>{{ article.title }}</h1>
-            <p class="article-meta">By {{ article.author }} | Published on {{ article.created_at.strftime('%B %d, %Y') }}</p>
-            <div class="tags-container">
+{% block content %}
+<article class="article-page">
+    <header class="article-header container">
+        <div class="article-header-content">
+            {% if article.tags %}
+            <div class="article-tags">
                 {% for tag in article.tags %}
-                    <span class="category-tag">{{ tag }}</span>
+                    <span class="category-label {{ tag | lower }}">{{ tag }}</span>
                 {% endfor %}
             </div>
-        </header>
-
-        {% if article.has_image %}
-        <img src="{{ url_for('get_image', article_id=article.id) }}" class="article-header-image" alt="Article Header Image">
-        {% elif article.image_url %}
-        <img src="{{ article.image_url }}" class="article-header-image" alt="Article Header Image">
-        {% endif %}
-        
-        <div class="article-body">
-            <!-- The |safe filter allows rendering HTML content if you add a rich text editor later -->
-            {{ article.content | safe }}
+            {% endif %}
+            <h1>{{ article.title }}</h1>
+            <p class="article-meta">By {{ article.author }} | Published on {{ article.created_at.strftime('%B %d, %Y') }}</p>
         </div>
-    </article>
-</main>
+    </header>
+
+    {% if article.has_image or article.image_url %}
+    <figure class="article-figure">
+        {% if article.has_image %}
+            <img src="{{ url_for('get_image', article_id=article.id) }}" alt="{{ article.title }}">
+        {% elif article.image_url %}
+            <img src="{{ article.image_url }}" alt="{{ article.title }}">
+        {% endif %}
+    </figure>
+    {% endif %}
+
+    <div class="article-body container">
+        {{ article.content | safe }}
+    </div>
+</article>
 {% endblock %}

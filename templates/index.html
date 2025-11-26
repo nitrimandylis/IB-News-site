@@ -1,62 +1,80 @@
 {% extends "base.html" %}
+
 {% block content %}
-
-<!-- Hero Section - "Beautiful News" Style -->
-{% if articles %}
-<section class="hero-section">
-    <div class="hero-image-container">
-        {% if articles[0].has_image %}
-            <img src="{{ url_for('get_image', article_id=articles[0].id) }}" alt="{{ articles[0].title }}" class="hero-image">
-        {% elif articles[0].image_url %}
-            <img src="{{ articles[0].image_url }}" alt="{{ articles[0].title }}" class="hero-image">
-        {% else %}
-            <!-- Placeholder if no image is available -->
-            <div class="hero-image-placeholder"></div>
-        {% endif %}
-        <div class="hero-content container">
-            {% if articles[0].tags %}
-            <div class="hero-categories">
-                {% for tag in articles[0].tags %}
-                    <span class="article-category category-{{ tag | lower }}">{{ tag }}</span>
-                {% endfor %}
+<div class="container">
+    <!-- Hero Section -->
+    {% if articles %}
+    <section class="hero" aria-label="Featured story">
+        <div class="hero-content">
+            <div class="hero-image">
+                {% if articles[0].has_image %}
+                    <img src="{{ url_for('get_image', article_id=articles[0].id) }}" alt="{{ articles[0].title }}">
+                {% elif articles[0].image_url %}
+                    <img src="{{ articles[0].image_url }}" alt="{{ articles[0].title }}">
+                {% else %}
+                <div style="background: linear-gradient(135deg, #4A6378 0%, #0B6B53 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: rgba(255,255,255,0.3); font-size: 2rem;">Featured Image</span>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-            <h1 class="hero-title">{{ articles[0].title }}</h1>
-            <p class="hero-meta">By {{ articles[0].author }} | {{ articles[0].created_at.strftime('%B %d, %Y') }}</p>
-            <p class="hero-excerpt">{{ articles[0].content | striptags | truncate(200) }}</p>
-            <a href="{{ url_for('article', article_id=articles[0].id) }}" class="read-more-btn">Read Full Story &rarr;</a>
+            <div class="hero-body">
+                {% if articles[0].tags %}
+                <div>
+                    {% for tag in articles[0].tags %}
+                        <span class="category-label {{ tag | lower }}">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <h1>{{ articles[0].title }}</h1>
+                <p class="article-meta">By {{ articles[0].author }} | {{ articles[0].created_at.strftime('%B %d, %Y') }}</p>
+                <p class="hero-excerpt">{{ articles[0].content | striptags | truncate(200) }}</p>
+                <a href="{{ url_for('article', article_id=articles[0].id) }}" class="btn-read-more">Read Full Story <span>→</span></a>
+            </div>
         </div>
-    </div>
-</section>
-{% endif %}
+    </section>
 
-<!-- Articles Grid - Broadsheet Style -->
-<section id="articles" class="article-grid-section">
-    <div class="container">
+    <!-- Section Navigation -->
+    <nav class="section-nav" aria-label="Article sections">
+        <a href="#all" class="active">All Stories</a>
+        <a href="#news">News</a>
+        <a href="#opinion">Opinion</a>
+        <a href="#arts">Arts</a>
+        <a href="#sports">Sports</a>
+        <a href="#student-life">Student Life</a>
+    </nav>
+
+    <!-- Latest Articles -->
+    <section class="articles-section">
+        <h2 class="section-title">Latest Articles</h2>
         <div class="article-grid">
-            <!-- Loop through all articles -->
             {% for article in articles[1:] %}
-                 <a href="{{ url_for('article', article_id=article.id) }}" class="article-card {% if loop.first %}featured{% endif %}">
-                    <div class="card-image-placeholder" style="background-image: url('{% if article.has_image %}{{ url_for('get_image', article_id=article.id) }}{% else %}{{ article.image_url }}{% endif %}');"></div>
-                    <div class="card-content">
-                        {% if article.tags %}
-                        <div>
-                            {% for tag in article.tags %}
-                                <span class="article-category category-{{ tag | lower }}">{{ tag }}</span>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                        <h3>{{ article.title }}</h3>
-                        <div class="article-meta">
-                           By {{ article.author }} | {{ article.created_at.strftime('%B %d, %Y') }}
-                        </div>
+            <a href="{{ url_for('article', article_id=article.id) }}" class="article-card">
+                <div class="card-image">
+                    {% if article.has_image %}
+                        <img src="{{ url_for('get_image', article_id=article.id) }}" alt="{{ article.title }}">
+                    {% elif article.image_url %}
+                        <img src="{{ article.image_url }}" alt="{{ article.title }}">
+                    {% else %}
+                        <div style="background: linear-gradient(135deg, #EDEAE4 0%, #E0DDD5 100%); width: 100%; height: 100%;"></div>
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    {% if article.tags %}
+                    <div>
+                        {% for tag in article.tags %}
+                            <span class="card-category {{ tag | lower }}">{{ tag }}</span>
+                        {% endfor %}
                     </div>
-                </a>
+                    {% endif %}
+                    <h3>{{ article.title }}</h3>
+                    <p class="card-meta">By {{ article.author }} | {{ article.created_at.strftime('%B %d, %Y') }}</p>
+                </div>
+            </a>
             {% else %}
                 <p>No articles found. Check back later!</p>
             {% endfor %}
         </div>
-    </div>
-</section>
-
+    </section>
+    {% endif %}
+</div>
 {% endblock %}

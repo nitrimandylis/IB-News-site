@@ -1,69 +1,73 @@
-{% extends "base.html" %} {% block title %}Dashboard{% endblock %} {% block
-content %}
-<div class="container">
-    <h1>Admin Dashboard</h1>
-    <form action="/admin/add" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" id="title" name="title" required />
-        </div>
-        <div class="form-group">
-            <label for="author">Author</label>
-            <input type="text" id="author" name="author" required />
-        </div>
-        <div class="form-group">
-            <label for="image">Image Upload</label>
-            <input type="file" id="image" name="image" accept="image/*" />
-        </div>
-        <div class="form-group">
-            <label for="image_url">Or Image URL</label>
-            <input type="text" id="image_url" name="image_url" />
-        </div>
-        <div class="form-group">
-            <label for="tags">Tags</label>
-            <div class="custom-select-wrapper">
-                <div class="custom-select">
-                    <div class="custom-select__trigger"><span>Select Tags</span>
-                        <div class="arrow"></div>
-                    </div>
-                    <div class="custom-options">
-                        {% for tag in tags %}
-                            <div class="custom-option" data-value="{{ tag.id }}">
-                                <input type="checkbox" id="tag-{{ tag.id }}" name="tags" value="{{ tag.id }}">
-                                <label for="tag-{{ tag.id }}">{{ tag.name }}</label>
-                            </div>
-                        {% endfor %}
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-container container">
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome, {{ current_user.username }}.</p>
+    </div>
+
+    <div class="admin-section">
+        <h2>Add New Article</h2>
+        <form action="/admin/add" method="POST" enctype="multipart/form-data" class="admin-form">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" name="author" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Image Upload</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="image_url">Or Image URL</label>
+                <input type="text" id="image_url" name="image_url">
+            </div>
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                <div class="custom-select-wrapper">
+                    <div class="custom-select">
+                        <div class="custom-select__trigger"><span>Select Tags</span>
+                            <div class="arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            {% for tag in tags %}
+                                <div class="custom-option" data-value="{{ tag.id }}">
+                                    <input type="checkbox" id="tag-{{ tag.id }}" name="tags" value="{{ tag.id }}">
+                                    <label for="tag-{{ tag.id }}">{{ tag.name }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="content">Content</label>
-            <textarea id="content" name="content" required></textarea>
-        </div>
-        <button type="submit" class="btn">Publish Article</button>
-    </form>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea id="content" name="content" required></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Publish Article</button>
+        </form>
+    </div>
 
-    <hr />
-
-    <h2>Manage Articles</h2>
-    <ul class="article-list">
-        {% for article in articles %}
-        <li>
-            <span>{{ article.title }}</span>
-            <a href="/admin/edit/{{ article.id }}" class="btn btn-danger"
-                >Edit</a
-            >
-            <form
-                action="/admin/delete/{{ article.id }}"
-                method="POST"
-                style="display: inline"
-                onsubmit="return confirm('Are you sure you want to delete this article?');"
-            >
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="admin-section">
+        <h2>Manage Articles</h2>
+        <ul class="article-manage-list">
+            {% for article in articles %}
+            <li class="article-manage-item">
+                <span class="article-title">{{ article.title }}</span>
+                <div class="article-actions">
+                    <a href="/admin/edit/{{ article.id }}" class="btn-edit">Edit</a>
+                    <form action="/admin/delete/{{ article.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this article?');">
+                        <button type="submit" class="btn-delete">Delete</button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}
