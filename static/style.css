@@ -238,8 +238,39 @@
 
         @media (max-width: 768px) {
             .hamburger { display: flex; }
-            nav { display: none; }
-            .nav-wrapper { flex-direction: column; }
+            .nav-wrapper {
+                display: none; /* Hide by default */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-surface);
+                padding: 2rem;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+                border-top: 1px solid var(--border-light);
+            }
+            .nav-wrapper.nav-open {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+            }
+            .search-form {
+                width: 100%;
+            }
+            .search-form input {
+                width: 100%;
+            }
         }
 
         /* --- Hero Section (Beautiful News Style) --- */
@@ -300,20 +331,7 @@
             width: fit-content;
         }
 
-        .category-label.business {
-            background: rgba(74, 99, 120, 0.1);
-            color: var(--accent-blue);
-        }
 
-        .category-label.student {
-            background: rgba(11, 107, 83, 0.1);
-            color: var(--accent-green);
-        }
-
-        .category-label.opinion {
-            background: rgba(68, 13, 15, 0.1);
-            color: var(--accent-red);
-        }
 
         .hero h1 {
             margin: 0;
@@ -451,16 +469,9 @@
             gap: 0.8rem;
         }
 
-        .card-category {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
 
-        .card-category.business { color: var(--accent-blue); }
-        .card-category.student { color: var(--accent-green); }
-        .card-category.opinion { color: var(--accent-red); }
+
+
 
         .card-content h3 {
             margin: 0;
@@ -988,4 +999,76 @@
     .search-layout {
         grid-template-columns: 1fr;
     }
+}
+
+/* --- Search Results List --- */
+.search-results-list .article-card {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.search-results-list .article-card .card-image {
+    height: 100%;
+    min-height: 180px;
+}
+
+@media (max-width: 768px) {
+    .search-results-list .article-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* --- Slim Select Customization --- */
+.ss-main {
+    font-family: var(--font-sans) !important;
+}
+
+.ss-main .ss-multi-selected {
+    border: 1px solid var(--border-light) !important;
+    background-color: var(--bg-primary) !important;
+    border-radius: 6px !important;
+    padding: 0.5rem !important;
+}
+
+.ss-main .ss-multi-selected .ss-values .ss-value {
+    background-color: var(--accent-blue) !important;
+    color: #fff !important;
+}
+
+.ss-main .ss-content .ss-list .ss-option.ss-highlighted,
+.ss-main .ss-content .ss-list .ss-option:hover {
+    background-color: var(--accent-green) !important;
+    color: #fff !important;
+}
+
+/* --- About Page --- */
+.about-page {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    max-width: 900px;
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.about-header h1 {
+    font-size: 3rem;
+}
+
+.about-content h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 0.5rem;
+}
+
+.about-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
 }

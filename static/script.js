@@ -1,13 +1,12 @@
-// Hamburger menu toggle
+        // Hamburger menu toggle
         const hamburger = document.querySelector('.hamburger');
-        const nav = document.querySelector('nav');
+        const navWrapper = document.querySelector('.nav-wrapper');
 
         hamburger?.addEventListener('click', () => {
-            hamburger.setAttribute('aria-expanded', 
-                hamburger.getAttribute('aria-expanded') === 'false' ? 'true' : 'false'
-            );
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            navWrapper.classList.toggle('nav-open');
         });
-
         // Section navigation active state
         const sectionLinks = document.querySelectorAll('.section-nav a');
         sectionLinks.forEach(link => {

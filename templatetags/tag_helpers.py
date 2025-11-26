@@ -1,5 +1,31 @@
 import hashlib
 
+def get_hsl_color(tag_name):
+    """
+    Generates a unique, somewhat pleasant HSL color from a string.
+    """
+    hash_obj = hashlib.md5(tag_name.encode())
+    hash_hex = hash_obj.hexdigest()
+    hue = int(hash_hex[:8], 16) % 360
+    saturation = int(hash_hex[8:16], 16) % 30 + 70  # 70-100% for vibrant colors
+    lightness = int(hash_hex[16:24], 16) % 30 + 50 # 50-80% for good readability
+    return (hue, saturation, lightness)
+
+def get_background_color(tag_name):
+    """
+    Returns the HSL background color string for a tag.
+    """
+    hue, saturation, lightness = get_hsl_color(tag_name)
+    return f'hsl({hue}, {saturation}%, {lightness}%)'
+
+def get_text_color(tag_name):
+    """
+    Determines if the text on a given tag's color should be black or white.
+    """
+    hue, saturation, lightness = get_hsl_color(tag_name)
+    # If lightness is high, use black text, otherwise use white.
+    return '#000000' if lightness > 70 else '#FFFFFF'
+
 TAG_COLOR_PALETTE = {
     'ad': ('#FFB300', '#000000'),
     'Arts': ('#0FD3FF', '#000000'),

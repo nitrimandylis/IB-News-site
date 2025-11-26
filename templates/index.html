@@ -21,7 +21,7 @@
                 {% if articles[0].tags %}
                 <div>
                     {% for tag in articles[0].tags %}
-                        <span class="category-label {{ tag | lower }}">{{ tag }}</span>
+                        <span class="category-label" style="background-color: {{ tag | get_background_color }}; color: {{ tag | get_text_color }};">{{ tag }}</span>
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -35,17 +35,14 @@
 
     <!-- Section Navigation -->
     <nav class="section-nav" aria-label="Article sections">
-        <a href="#all" class="active">All Stories</a>
-        <a href="#news">News</a>
-        <a href="#opinion">Opinion</a>
-        <a href="#arts">Arts</a>
-        <a href="#sports">Sports</a>
-        <a href="#student-life">Student Life</a>
+        <a href="{{ url_for('index') }}" class="{% if not selected_tag %}active{% endif %}">All Stories</a>
+        {% for tag in tags %}
+        <a href="{{ url_for('index', tag=tag) }}" class="{% if selected_tag == tag %}active{% endif %}">{{ tag }}</a>
+        {% endfor %}
     </nav>
 
     <!-- Latest Articles -->
     <section class="articles-section">
-        <h2 class="section-title">Latest Articles</h2>
         <div class="article-grid">
             {% for article in articles[1:] %}
             <a href="{{ url_for('article', article_id=article.id) }}" class="article-card">
@@ -62,8 +59,7 @@
                     {% if article.tags %}
                     <div>
                         {% for tag in article.tags %}
-                            <span class="card-category {{ tag | lower }}">{{ tag }}</span>
-                        {% endfor %}
+                                                            <span class="category-label" style="background-color: {{ tag | get_background_color }}; color: {{ tag | get_text_color }};">{{ tag }}</span>                        {% endfor %}
                     </div>
                     {% endif %}
                     <h3>{{ article.title }}</h3>
