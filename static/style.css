@@ -276,18 +276,18 @@
         /* --- Hero Section (Beautiful News Style) --- */
         .hero {
             background: var(--bg-surface);
-            padding: 4rem 0;
+            padding: 5rem 0; /* Increase vertical padding too */
             margin-bottom: 3rem;
             border-bottom: 1px solid var(--border-light);
         }
-
         .hero-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            grid-template-columns: 480px 1fr; /* Fixed image, flexible content */
+            gap: 6rem; /* Large gap for breathing room */
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
         .hero-image {
             position: relative;
             width: 100%;
@@ -318,9 +318,9 @@
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
-            padding-left: 2rem;
+            padding-left: 1.5rem;
+            max-width: 550px; /* Constrain text width for readability */
         }
-
         .category-label {
             display: inline-block;
             font-size: 0.8rem;
@@ -1199,77 +1199,149 @@
 }
 
 /* Base Tag Style */
+
 .category-tag {
-    padding: 6px 14px;
-    border-radius: 6px;
+
+    padding: 7px 16px;
+
+    border-radius: 24px;
+
     font-size: 11px;
+
     font-weight: 600;
+
     text-transform: uppercase;
-    letter-spacing: 1px;
+
+    letter-spacing: 0.8px;
+
     display: inline-block;
+
     font-family: var(--font-sans);
-    backdrop-filter: blur(8px);
-    transition: all 0.2s ease;
+
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
 }
+
+
 
 .category-tag:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
 }
+
+
 
 /* Primary Categories */
+
 .tag-ad {
-    background: rgba(11, 107, 83, 0.12);
-    color: #0B6B53;
-    border: 1px solid rgba(11, 107, 83, 0.2);
+
+    background: rgba(139, 92, 246, 0.12);
+
+    color: #7C3AED;
+
+    border: 1px solid rgba(139, 92, 246, 0.25);
+
 }
+
+
 
 .tag-business {
-    background: rgba(74, 99, 120, 0.12);
-    color: #4A6378;
-    border: 1px solid rgba(74, 99, 120, 0.2);
+
+    background: rgba(37, 99, 235, 0.1);
+
+    color: #2563EB;
+
+    border: 1px solid rgba(37, 99, 235, 0.25);
+
 }
+
+
 
 .tag-for-student {
-    background: rgba(139, 92, 246, 0.12);
-    color: #6B46C1;
-    border: 1px solid rgba(139, 92, 246, 0.2);
+
+    background: rgba(14, 165, 233, 0.12);
+
+    color: #0EA5E9;
+
+    border: 1px solid rgba(14, 165, 233, 0.25);
+
 }
+
+
 
 /* Content Categories */
+
 .tag-arts {
-    background: rgba(184, 134, 11, 0.1);
-    color: #B8860B;
-    border: 1px solid rgba(184, 134, 11, 0.2);
+
+    background: rgba(251, 146, 60, 0.12);
+
+    color: #EA580C;
+
+    border: 1px solid rgba(251, 146, 60, 0.25);
+
 }
+
+
 
 .tag-opinion {
-    background: rgba(68, 13, 15, 0.1);
-    color: #440D0F;
-    border: 1px solid rgba(68, 13, 15, 0.2);
+
+    background: rgba(225, 29, 72, 0.1);
+
+    color: #BE123C;
+
+    border: 1px solid rgba(225, 29, 72, 0.25);
+
 }
+
+
 
 .tag-sports {
-    background: rgba(22, 101, 52, 0.1);
-    color: #166534;
-    border: 1px solid rgba(22, 101, 52, 0.2);
+
+    background: rgba(234, 179, 8, 0.12);
+
+    color: #CA8A04;
+
+    border: 1px solid rgba(234, 179, 8, 0.25);
+
 }
+
+
 
 /* Student Activity Categories */
+
 .tag-student-life {
+
     background: rgba(16, 185, 129, 0.12);
-    color: #10B981;
-    border: 1px solid rgba(16, 185, 129, 0.2);
+
+    color: #059669;
+
+    border: 1px solid rgba(16, 185, 129, 0.25);
+
 }
+
+
 
 .tag-student-projects {
-    background: rgba(234, 88, 12, 0.1);
-    color: #EA580C;
-    border: 1px solid rgba(234, 88, 12, 0.2);
+
+    background: rgba(168, 85, 247, 0.12);
+
+    color: #9333EA;
+
+    border: 1px solid rgba(168, 85, 247, 0.25);
+
 }
 
+
+
 .tag-volunteering-cas {
-    background: rgba(5, 150, 105, 0.12);
-    color: #059669;
-    border: 1px solid rgba(5, 150, 105, 0.2);
+
+    background: rgba(244, 114, 182, 0.12);
+
+    color: #DB2777;
+
+    border: 1px solid rgba(244, 114, 182, 0.25);
+
 }
