@@ -1075,6 +1075,7 @@
 .about-content p {
     font-size: 1.1rem;
     line-height: 1.8;
+    font-family: var(--font-sans);
 }
 
 /* --- Tag Pill Filters --- */
