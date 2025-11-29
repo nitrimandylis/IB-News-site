@@ -1,149 +1,169 @@
-// Wait until the DOM is fully loaded
-document.addEventListener("DOMContentLoaded", function () {
+        // Hamburger menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navWrapper = document.querySelector('.nav-wrapper');
 
-    // === Scroll Progress Bar ===
-    function updateProgressBar() {
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-        const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
-        const progressBar = document.getElementById('progressBar');
-        if (progressBar) progressBar.style.width = `${scrollPercent}%`;
-    }
-
-    document.addEventListener('scroll', updateProgressBar);
-
-    // === Universal Burger Menu Implementation ===
-    const burgerMenu = document.getElementById('burger-menu');
-    const menuOverlay = document.getElementById('menu');
-    const backdrop = document.getElementById('menu-backdrop');
-    let focusableElements;
-    let firstFocusableElement;
-    let lastFocusableElement;
-
-    if (!burgerMenu || !menuOverlay || !backdrop) {
-        console.warn("Burger menu, overlay, or backdrop not found in DOM.");
-        return;
-    }
-
-    // Get all focusable elements in the menu for keyboard navigation
-    function setFocusableElements() {
-        focusableElements = menuOverlay.querySelectorAll(
-            'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
-        );
-        firstFocusableElement = focusableElements[0];
-        lastFocusableElement = focusableElements[focusableElements.length - 1];
-    }
-
-    function openMenu() {
-        // Update ARIA states
-        burgerMenu.setAttribute('aria-expanded', 'true');
-        menuOverlay.setAttribute('aria-hidden', 'false');
-
-        // Show menu and backdrop with animation classes
-        burgerMenu.classList.add('open');
-        menuOverlay.classList.add('show');
-        backdrop.classList.add('show');
-
-        // Prevent scrolling
-        document.body.classList.add('menu-open');
-
-        // Set focus trap
-        setFocusableElements();
-
-        // Set focus to the menu after a short delay to allow animation
-        setTimeout(() => {
-            menuOverlay.focus();
-        }, 100);
-    }
-
-    function closeMenu() {
-        // Update ARIA states
-        burgerMenu.setAttribute('aria-expanded', 'false');
-        menuOverlay.setAttribute('aria-hidden', 'true');
-
-        // Hide menu and backdrop
-        burgerMenu.classList.remove('open');
-        menuOverlay.classList.remove('show');
-        backdrop.classList.remove('show');
-
-        // Re-enable scrolling
-        document.body.classList.remove('menu-open');
-
-        // Return focus to burger button
-        burgerMenu.focus();
-    }
-
-    // Toggle menu when clicking burger icon
-    burgerMenu.addEventListener('click', function () {
-        if (menuOverlay.classList.contains('show')) {
-            closeMenu();
-        } else {
-            openMenu();
-        }
-    });
-
-    // Close menu when clicking on backdrop
-    backdrop.addEventListener('click', closeMenu);
-
-    // Close menu on Escape key
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && menuOverlay.classList.contains('show')) {
-            closeMenu();
-        }
-
-        // Trap focus inside modal when open
-        if (e.key === 'Tab' && menuOverlay.classList.contains('show')) {
-            // If shift + tab and on first element, go to last element
-            if (e.shiftKey && document.activeElement === firstFocusableElement) {
-                e.preventDefault();
-                lastFocusableElement.focus();
-            }
-            // If tab and on last element, cycle back to first element
-            else if (!e.shiftKey && document.activeElement === lastFocusableElement) {
-                e.preventDefault();
-                firstFocusableElement.focus();
-            }
-        }
-    });
-
-    // Handle window resize to ensure menu works at all screen sizes
-    window.addEventListener('resize', function () {
-        if (menuOverlay.classList.contains('show')) {
-            setFocusableElements(); // Update focusable elements on resize
-        }
-    });
-
-    // === Custom Select Dropdown ===
-    const customSelect = document.querySelector('.custom-select');
-    if (customSelect) {
-        const trigger = customSelect.querySelector('.custom-select__trigger');
-        const options = customSelect.querySelector('.custom-options');
-        const optionCheckboxes = options.querySelectorAll('input[type="checkbox"]');
-        const triggerSpan = trigger.querySelector('span');
-
-        function updateTriggerText() {
-            const checkedOptions = Array.from(optionCheckboxes).filter(el => el.checked);
-            if (checkedOptions.length > 0) {
-                triggerSpan.textContent = checkedOptions.map(el => el.nextElementSibling.textContent).join(', ');
-            } else {
-                triggerSpan.textContent = 'Select Tags';
-            }
-        }
-
-        trigger.addEventListener('click', () => {
-            customSelect.classList.toggle('open');
+        hamburger?.addEventListener('click', () => {
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+            navWrapper.classList.toggle('nav-open');
+        });
+        // Section navigation active state
+        const sectionLinks = document.querySelectorAll('.section-nav a');
+        sectionLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                sectionLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
         });
 
-        window.addEventListener('click', (e) => {
-            if (!customSelect.contains(e.target)) {
-                customSelect.classList.remove('open');
+                // Article card click handler
+
+                const articleCards = document.querySelectorAll('.article-card');
+
+                articleCards.forEach(card => {
+
+                    card.addEventListener('click', () => {
+
+                        const articleLink = card.querySelector('a');
+
+                        if(articleLink) {
+
+                            articleLink.click();
+
+                        }
+
+                    });
+
+                    card.addEventListener('keypress', (e) => {
+
+                        if (e.key === 'Enter' || e.key === ' ') {
+
+                            const articleLink = card.querySelector('a');
+
+                            if(articleLink) {
+
+                                articleLink.click();
+
+                            }
+
+                        }
+
+                    });
+
+                });
+
+        
+
+        function toggleTag(element) {
+
+            element.classList.toggle('active');
+
+            updateSelectedTagsInput();
+
+        }
+
+        
+
+        function updateSelectedTagsInput() {
+
+        
+
+            const activeTags = Array.from(document.querySelectorAll('.tag-chip.active'))
+
+        
+
+                .map(chip => chip.textContent);
+
+        
+
+            const selectedTagsInput = document.getElementById('selected-tags-input');
+
+        
+
+            if (selectedTagsInput) {
+
+        
+
+                selectedTagsInput.value = activeTags.join(',');
+
+        
+
             }
+
+        
+
+        }
+
+        
+
+        
+
+        
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+        
+
+            const tagPills = document.querySelectorAll('.tag-pill');
+
+        
+
+            tagPills.forEach(pill => {
+
+        
+
+                const checkbox = pill.querySelector('.tag-checkbox');
+
+        
+
+                if (checkbox) {
+
+        
+
+                    pill.addEventListener('click', () => {
+
+        
+
+                        checkbox.checked = !checkbox.checked;
+
+        
+
+                        pill.classList.toggle('active', checkbox.checked);
+
+        
+
+                    });
+
+        
+
+                    // Set initial state
+
+        
+
+                    if(checkbox.checked) {
+
+        
+
+                        pill.classList.add('active');
+
+        
+
+                    }
+
+        
+
+                }
+
+        
+
+            });
+
+        
+
         });
 
-        optionCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateTriggerText);
-        });
+        
 
-        // Initial text update on page load
-        updateTriggerText();
-    }
-});
+        
+
+        

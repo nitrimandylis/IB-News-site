@@ -11,11 +11,16 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-from templatetags.tag_helpers import get_tag_color, get_text_color_for_tag, get_tag_class
+@app.context_processor
+def inject_current_user():
+    user = session.get('user')
+    if user:
+        return {'current_user': {'is_authenticated': True, 'username': user}}
+    return {'current_user': {'is_authenticated': False}}
+
+from templatetags.tag_helpers import get_tag_class
 
 # Register custom Jinja2 filters
-app.jinja_env.filters['get_tag_color'] = get_tag_color
-app.jinja_env.filters['get_text_color_for_tag'] = get_text_color_for_tag
 app.jinja_env.filters['get_tag_class'] = get_tag_class
 
 # --- Image Upload Settings ---
@@ -59,8 +64,17 @@ def close_connection(exception):
 def index():
     conn = get_db()
     if conn is None:
-        return render_template('index.html', articles=[])
+        return render_template('index.html', articles=[], tags=[])
+    
     cur = conn.cursor()
+    
+    # Fetch all tags except '#ad'
+    cur.execute("SELECT name FROM tags WHERE name != '#ad' ORDER BY name")
+    all_tags = [row[0] for row in cur.fetchall()]
+    
+    selected_tag = request.args.get('tag')
+    
+    # Fetch the latest article for the hero section
     cur.execute('''
         SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
                STRING_AGG(t.name, ',')
@@ -68,8 +82,50 @@ def index():
         LEFT JOIN article_tags at ON a.id = at.article_id
         LEFT JOIN tags t ON at.tag_id = t.id
         GROUP BY a.id
-        ORDER BY a.created_at DESC;
+        ORDER BY a.created_at DESC
+        LIMIT 1;
     ''')
+    hero_article_data = cur.fetchone()
+    
+    hero_article = None
+    if hero_article_data:
+        hero_article = {
+            'id': hero_article_data[0],
+            'title': hero_article_data[1],
+            'author': hero_article_data[2],
+            'content': hero_article_data[3],
+            'image_url': hero_article_data[4],
+            'created_at': hero_article_data[5],
+            'has_image': hero_article_data[6],
+            'tags': hero_article_data[7].split(',') if hero_article_data[7] else []
+        }
+
+    # Base query for the rest of the articles
+    sql = '''
+        SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
+               STRING_AGG(t.name, ',')
+        FROM articles a
+        LEFT JOIN article_tags at ON a.id = at.article_id
+        LEFT JOIN tags t ON at.tag_id = t.id
+    '''
+    params = []
+    where_clauses = []
+
+    # Exclude the hero article from the list
+    if hero_article:
+        where_clauses.append('a.id != %s')
+        params.append(hero_article['id'])
+
+    if selected_tag:
+        where_clauses.append('a.id IN (SELECT article_id FROM article_tags WHERE tag_id IN (SELECT id FROM tags WHERE name = %s))')
+        params.append(selected_tag)
+
+    if where_clauses:
+        sql += ' WHERE ' + ' AND '.join(where_clauses)
+        
+    sql += ' GROUP BY a.id ORDER BY a.created_at DESC'
+    
+    cur.execute(sql, tuple(params))
     articles = cur.fetchall()
     cur.close()
     
@@ -86,7 +142,7 @@ def index():
             'tags': article[7].split(',') if article[7] else []
         })
 
-    return render_template('index.html', articles=articles_dict)
+    return render_template('index.html', hero_article=hero_article, articles=articles_dict, tags=all_tags, selected_tag=selected_tag)
 
 @app.route('/article/<int:article_id>')
 def article(article_id):

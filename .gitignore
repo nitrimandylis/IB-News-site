@@ -19,6 +19,8 @@ instance/
 # IDE / Editor specific
 .vscode/
 .idea/
+.gemini/
+
 
 # OS-specific
 .DS_Store

@@ -3,19 +3,20 @@
 {% block title %}Search Results{% endblock %}
 
 {% block content %}
-<div class="search-container">
+<div class="search-container container">
     <div class="search-header">
         <h1>Search Results</h1>
-        <p class="results-count">Found {{ articles|length }} articles</p>
+        <p class="results-count">Found {{ articles|length }} articles for "{{query}}"</p>
     </div>
 
     <div class="search-layout">
         <!-- Filters Sidebar -->
         <aside class="filters-sidebar">
             <form method="get" action="{{ url_for('search') }}">
+                <input type="hidden" name="query" value="{{ query }}">
                 <div class="filters-header">
                     <h2 class="filters-title">Filters</h2>
-                    <a href="{{ url_for('search') }}" class="clear-filters">Clear all</a>
+                    <a href="{{ url_for('search', query=query) }}" class="clear-filters">Clear all</a>
                 </div>
 
                 <!-- Tags Filter -->
@@ -23,7 +24,7 @@
                     <label class="filter-label">Tags</label>
                     <div class="tag-chips">
                         {% for tag in all_tags %}
-                        <span class="tag-chip {% if tag in selected_tags %}active{% endif %} article-category {{ tag|get_tag_class }}" onclick="toggleTag(this)">{{ tag }}</span>
+                        <span class="tag-chip {% if tag in selected_tags %}active{% endif %}" onclick="toggleTag(this)">{{ tag }}</span>
                         {% endfor %}
                     </div>
                     <input type="hidden" name="tags" id="selected-tags-input" value="{{ selected_tags|join(',') }}">
@@ -62,111 +63,39 @@
         </aside>
 
         <!-- Results Area -->
-        <main class="results-area search-results">
-            <!-- Active Filters Display -->
-            <div class="active-filters" id="activeFilters">
-                {% for tag in selected_tags %}
-                <div class="active-filter-chip" data-type="tag">
-                    <span>{{ tag }}</span>
-                    <button class="remove-filter" onclick="removeFilter(this)">×</button>
-                </div>
-                {% endfor %}
-                {% for author in selected_authors %}
-                <div class="active-filter-chip" data-type="author">
-                    <span>{{ author }}</span>
-                    <button class="remove-filter" onclick="removeFilter(this)">×</button>
-                </div>
-                {% endfor %}
-                {% if start_date and end_date %}
-                <div class="active-filter-chip" data-type="date">
-                    <span>{{ start_date }} - {{ end_date }}</span>
-                    <button class="remove-filter" onclick="removeFilter(this)">×</button>
-                </div>
-                {% endif %}
-            </div>
-
-            {% for article in articles %}
-            <article class="article-card">
-                <div class="article-content">
-                    <div class="article-header">
-                        {% for tag in article.tags %}
-                            <span class="article-category {{ tag|get_tag_class }}">{{ tag }}</span>
-                        {% endfor %}
-                        <h2 class="article-title">
-                            <a href="{{ url_for('article', article_id=article.id) }}">{{ article.title }}</a>
-                        </h2>
-                        <p class="article-excerpt">
-                            {{ article.content | truncate(150) }}
-                        </p>
+        <main class="search-results-list">
+            {% if articles %}
+                {% for article in articles %}
+                <a href="{{ url_for('article', article_id=article.id) }}" class="article-card">
+                    <div class="card-image">
+                        {% if article.has_image %}
+                            <img src="{{ url_for('get_image', article_id=article.id) }}" alt="{{ article.title }}">
+                        {% elif article.image_url %}
+                            <img src="{{ article.image_url }}" alt="{{ article.title }}">
+                        {% else %}
+                            <div style="background: linear-gradient(135deg, #EDEAE4 0%, #E0DDD5 100%); width: 100%; height: 100%;"></div>
+                        {% endif %}
                     </div>
-                    <footer class="article-footer">
-                        <div class="article-meta">
-                            <span class="meta-item">
-                                <span class="meta-icon">✍️</span>
-                                <span class="author-name">{{ article.author }}</span>
-                            </span>
-                            <span class="meta-item">
-                                <span class="meta-icon">📅</span>
-                                <span>{{ article.created_at.strftime('%b %d, %Y') }}</span>
-                            </span>
+                    <div class="card-content">
+                        {% if article.tags %}
+                        <div>
+                            {% for tag in article.tags %}
+                                <span class="category-tag {{ tag|get_tag_class }}">{{ tag }}</span>
+                            {% endfor %}
                         </div>
-                        <div class="read-time">
-                            <span>📖</span>
-                            <span>5 min read</span>
-                        </div>
-                    </footer>
-                </div>
-            </article>
+                        {% endif %}
+                        <h3>{{ article.title }}</h3>
+                        <p class="card-meta">By {{ article.author }} | {{ article.created_at.strftime('%B %d, %Y') }}</p>
+                    </div>
+                </a>
+                {% endfor %}
             {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">🔍</div>
-                <h3 class="empty-state-title">No articles found</h3>
-                <p class="empty-state-text">Try adjusting your filters or search terms</p>
-            </div>
-            {% endfor %}
+                <div class="no-results">
+                    <h2>No articles found.</h2>
+                    <p>Try adjusting your filters or search terms.</p>
+                </div>
+            {% endif %}
         </main>
     </div>
 </div>
-
-<script>
-    function toggleTag(element) {
-        element.classList.toggle('active');
-        updateSelectedTagsInput();
-    }
-
-    function updateSelectedTagsInput() {
-        const activeTags = Array.from(document.querySelectorAll('.tag-chip.active'))
-            .map(chip => chip.textContent);
-        document.getElementById('selected-tags-input').value = activeTags.join(',');
-    }
-
-    function removeFilter(button) {
-        const chip = button.closest('.active-filter-chip');
-        const type = chip.getAttribute('data-type');
-        const text = chip.querySelector('span').textContent;
-
-        chip.remove();
-
-        if (type === 'tag') {
-            const tagChip = Array.from(document.querySelectorAll('.tag-chip'))
-                .find(el => el.textContent === text);
-            if (tagChip) {
-                tagChip.classList.remove('active');
-                updateSelectedTagsInput();
-            }
-        } else if (type === 'author') {
-            const checkbox = Array.from(document.querySelectorAll('.checkbox-label'))
-                .find(el => el.textContent === text)
-                ?.previousElementSibling;
-            if (checkbox) checkbox.checked = false;
-        } else if (type === 'date') {
-            document.getElementById('startDate').value = '';
-            document.getElementById('endDate').value = '';
-        }
-        
-        // Automatically resubmit the form
-        document.querySelector('.filters-sidebar form').submit();
-    }
-</script>
 {% endblock %}
-
