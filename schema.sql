@@ -24,3 +24,10 @@ CREATE TABLE IF NOT EXISTS article_tags (
     FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE CASCADE
 );
+-- Create a table for newsletter subscribers
+CREATE TABLE IF NOT EXISTS subscribers (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    subscribed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+

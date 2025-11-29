@@ -26,10 +26,14 @@
         <h2 class="section-title">Explore by Category</h2>
         <div class="category-grid">
             {% for tag in tags %}
-                                    <a href="{{ url_for('tag_page', tag_name=tag) }}" class="category-card">
-                                        <i class="category-icon {{ tag_icons[tag] }}"></i>
-                                        <span class="category-name">{{ tag }}</span>
-                                    </a>            {% endfor %}
+            <a
+                href="{{ url_for('tag_page', tag_name=tag) }}"
+                class="category-card"
+            >
+                <i class="category-icon {{ tag_icons[tag] }}"></i>
+                <span class="category-name">{{ tag }}</span>
+            </a>
+            {% endfor %}
         </div>
     </section>
 
@@ -93,25 +97,48 @@
         </div>
     </section>
 
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="{{ url_for('index', page=page-1, selected_tag=selected_tag) }}" class="pagination-btn">Previous</a>
+        {% else %}
+        <span class="pagination-btn disabled">Previous</span>
+        {% endif %}
+
+        {% for p in range(1, total_pages + 1) %}
+            {% if p == page %}
+            <span class="pagination-btn active">{{ p }}</span>
+            {% else %}
+            <a href="{{ url_for('index', page=p, selected_tag=selected_tag) }}" class="pagination-btn">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+        <a href="{{ url_for('index', page=page+1, selected_tag=selected_tag) }}" class="pagination-btn">Next</a>
+        {% else %}
+        <span class="pagination-btn disabled">Next</span>
+        {% endif %}
+    </div>
+    {% endif %}
+
     <!-- Call-to-Action Section -->
     <section class="cta-section">
-        <div class="cta-grid">
+        <div class = "cta-grid">
             <div class="cta-card">
-                <h3>Submit a Tip</h3>
+                <h3><i class="fa-solid fa-lightbulb"></i> Submit a Tip</h3>
                 <p>
                     Got a story lead? Share it with our editors confidentially.
                 </p>
-                <a href="#" class="btn-cta">Share Now</a>
+                <a href="{{ url_for('submit') }}" class="btn-cta">Share Now</a>
             </div>
             <div class="cta-card">
-                <h3>Write for Us</h3>
+                <h3><i class="fa-solid fa-pen-to-square"></i> Write for Us</h3>
                 <p>
                     Passionate about journalism? Join our team and make your
                     voice heard.
                 </p>
-                <a href="#" class="btn-cta">Join the Team</a>
+                <a href="{{ url_for('submit') }}" class="btn-cta">Join the Team</a>
             </div>
-        </div>
     </section>
 </div>
 {% endblock %}

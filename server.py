@@ -1,6 +1,8 @@
 import datetime
 import mimetypes
 import os
+import re # Import re for email validation
+from math import ceil # Add this import at the top
 
 import psycopg2
 from dotenv import load_dotenv
@@ -50,7 +52,7 @@ def inject_all_tags():
     # Font Awesome icon mappings (lowercase keys)
     tag_icons = {
         "ad": "fa-solid fa-money-bill-wave",
-        "business": "fa-solid fa-briefcase",
+        "business": "fa-solid fa-fa-briefcase",
         "for-the-student": "fa-solid fa-graduation-cap",
         "arts": "fa-solid fa-paint-brush",
         "opinion": "fa-solid fa-comments",
@@ -115,6 +117,7 @@ def close_connection(exception):
 
 # --- Public Routes ---
 
+ITEMS_PER_PAGE = 9 # Define constant
 
 @app.route("/")
 def index():
@@ -129,8 +132,17 @@ def index():
     all_tags = [row[0] for row in cur.fetchall()]
 
     selected_tag = request.args.get("tag")
+    page = request.args.get("page", 1, type=int) # Get current page, default to 1
 
-    # Base query for all articles
+    # Base query for all articles (before pagination limits)
+    count_sql = """
+        SELECT COUNT(DISTINCT a.id)
+        FROM articles a
+        LEFT JOIN article_tags at ON a.id = at.article_id
+        LEFT JOIN tags t ON at.tag_id = t.id
+    """
+    
+    # Base query for articles
     sql = """
         SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
                COALESCE(ARRAY_AGG(t.name), ARRAY[]::VARCHAR[])
@@ -138,13 +150,28 @@ def index():
         LEFT JOIN article_tags at ON a.id = at.article_id
         LEFT JOIN tags t ON at.tag_id = t.id
     """
+    where_clauses = []
     params = []
 
     if selected_tag:
-        sql += " WHERE a.id IN (SELECT article_id FROM article_tags WHERE tag_id IN (SELECT id FROM tags WHERE name = %s))"
+        where_clauses.append("a.id IN (SELECT article_id FROM article_tags WHERE tag_id IN (SELECT id FROM tags WHERE name = %s))")
         params.append(selected_tag)
 
+    if where_clauses:
+        sql += " WHERE " + " AND ".join(where_clauses)
+        count_sql += " WHERE " + " AND ".join(where_clauses)
+
     sql += " GROUP BY a.id ORDER BY a.created_at DESC"
+    
+    # Get total articles count for pagination
+    cur.execute(count_sql, tuple(params))
+    total_articles = cur.fetchone()[0]
+    total_pages = ceil(total_articles / ITEMS_PER_PAGE)
+
+    # Apply pagination limits
+    sql += " LIMIT %s OFFSET %s"
+    params.extend([ITEMS_PER_PAGE, (page - 1) * ITEMS_PER_PAGE])
+
 
     cur.execute(sql, tuple(params))
     articles = cur.fetchall()
@@ -165,10 +192,10 @@ def index():
         )
 
     hero_article = articles_dict[0] if articles_dict else None
-    top_articles_dict = articles_dict[1:5] if len(articles_dict) > 1 else []
+    # top_articles_dict = articles_dict[1:5] if len(articles_dict) > 1 else [] # top_articles will not be paginated
 
-    cur.execute("SELECT COUNT(*) FROM articles")
-    article_count = cur.fetchone()[0]
+    cur.execute("SELECT COUNT(*) FROM articles") # This is for author_count, not for pagination
+    article_count = cur.fetchone()[0] # This is for author_count, not for pagination
     author_count = 11
 
     cur.close()
@@ -176,12 +203,16 @@ def index():
     return render_template(
         "index.html",
         hero_article=hero_article,
-        top_articles=top_articles_dict,
-        articles=articles_dict,
+        # top_articles=top_articles_dict, 
+        articles=articles_dict, # This now contains only the paginated articles
         tags=all_tags,
         selected_tag=selected_tag,
         article_count=article_count,
         author_count=author_count,
+        page=page,
+        total_pages=total_pages,
+        items_per_page=ITEMS_PER_PAGE,
+        total_articles=total_articles
     )
 
 
@@ -387,6 +418,74 @@ def tag_page(tag_name):
         )
 
     return render_template("tag_page.html", articles=articles_dict, tag_name=tag_name)
+
+
+@app.route('/submit', methods=['GET', 'POST'])
+def submit():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        submission_type = request.form.get('submission_type')
+        content = request.form.get('content')
+        file = request.files.get('file') # For file uploads
+
+        app.logger.info(f"New Submission:")
+        app.logger.info(f"  Name: {name}")
+        app.logger.info(f"  Email: {email}")
+        app.logger.info(f"  Type: {submission_type}")
+        app.logger.info(f"  Content: {content[:100]}...") # Log first 100 chars
+        if file and file.filename:
+            # In a real app, save the file to disk or cloud storage
+            app.logger.info(f"  File: {file.filename} ({file.content_type})")
+        else:
+            app.logger.info(f"  File: None")
+        
+        # Here you would typically save to a database, send an email, etc.
+        # For now, we just flash a success message.
+        flash('Your submission has been received! Thank you.', 'success')
+        return redirect(url_for('submit')) # Redirect to GET to prevent form resubmission
+
+    return render_template('submit.html')
+
+import re # Import re for email validation
+
+@app.route('/subscribe_newsletter', methods=['POST'])
+def subscribe_newsletter():
+    email = request.form.get('email')
+
+    if not email:
+        flash('Email is required for subscription.', 'error')
+        return redirect(url_for('index'))
+
+    # Basic email validation regex
+    if not re.fullmatch(r"[^@]+@[^@]+\.[^@]+", email):
+        flash('Please enter a valid email address.', 'error')
+        return redirect(url_for('index'))
+
+    conn = get_db()
+    if conn is None:
+        flash('Database not available. Please try again later.', 'error')
+        return redirect(url_for('index'))
+
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            "INSERT INTO subscribers (email) VALUES (%s)",
+            (email,)
+        )
+        conn.commit()
+        flash('Thank you for subscribing to our newsletter!', 'success')
+    except psycopg2.errors.UniqueViolation:
+        conn.rollback() # Rollback the transaction on unique violation
+        flash('This email address is already subscribed.', 'error')
+    except Exception as e:
+        conn.rollback() # Rollback on any other error
+        app.logger.error(f"Error subscribing email {email}: {e}")
+        flash('An unexpected error occurred. Please try again later.', 'error')
+    finally:
+        cur.close()
+
+    return redirect(url_for('index'))
 
 
 # --- Admin Routes ---

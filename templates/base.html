@@ -82,30 +82,27 @@
                             </ul>
                         </nav>
 
-                        <nav>
-                            <div class="header-actions">
-                                <form
-                                    class="search-form"
-                                    role="search"
-                                    action="{{ url_for('search') }}"
-                                    method="get"
+                        <div class="header-actions">
+                            <form
+                                class="search-form"
+                                role="search"
+                                action="{{ url_for('search') }}"
+                                method="get"
+                            >
+                                <input
+                                    type="search"
+                                    name="query"
+                                    placeholder="Search articles..."
+                                    aria-label="Search articles"
+                                />
+                                <button
+                                    type="submit"
+                                    class="search-icon"
+                                    aria-label="Submit search"
                                 >
-                                    <input
-                                        type="search"
-                                        name="query"
-                                        placeholder="Search articles..."
-                                        aria-label="Search articles"
-                                    />
-                                    <button
-                                        type="submit"
-                                        class="search-icon"
-                                        aria-label="Submit search"
-                                    >
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                    </button>
-                                </form>
-                        </div>
-                    </nav>
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </form>
                     <button
                         class="hamburger"
                         aria-label="Toggle menu"
@@ -132,11 +129,15 @@
                             <li><a href="{{ url_for('index') }}">Home</a></li>
                             <li><a href="{{ url_for('about') }}">About</a></li>
                             <li>
-                                <a href="{{ url_for('about') }}">Contact Us</a>
-                            </li>
-                            <li>
                                 <a href="{{ url_for('admin') }}">Admin Panel</a>
                             </li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Communication</h4>
+                        <ul>
+                            <li><a href="{{ url_for('about') }}">Contact Us</a></li>
+                            <li><a href="{{ url_for('about') }}">Submit your Story</a></li>
                         </ul>
                     </div>
                     <div class="footer-section">
@@ -144,9 +145,10 @@
                         <p>
                             Subscribe to our newsletter for the latest stories.
                         </p>
-                        <form class="newsletter-form">
+                        <form class="newsletter-form" action="{{ url_for('subscribe_newsletter') }}" method="post">
                             <input
                                 type="email"
+                                name="email"
                                 placeholder="Your email address"
                                 required
                             />
