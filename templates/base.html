@@ -14,6 +14,7 @@
             rel="stylesheet"
             href="{{ url_for('static', filename='style.css') }}"
         />
+        <link rel="icon" href="{{ url_for('static', filename='Gazette.svg') }}" type="image/svg+xml">
     </head>
     <body>
         <!-- Skip to main content link for accessibility -->
@@ -24,8 +25,13 @@
             <div class="container">
                 <div class="header-wrapper">
                     <div class="logo">
-                        <a href="{{ url_for('index') }}">CGS IBDP Gazette</a>
-                        <span class="tagline">School News & Editorial</span>
+                        <a href="{{ url_for('index') }}">
+                            <img src="{{ url_for('static', filename='Gazette.svg') }}" alt="Gazette Logo" class="navbar-logo">
+                            <div class="logo-text">
+                                CGS IBDP Gazette
+                                <span class="tagline">School News & Editorial</span>
+                            </div>
+                        </a>
                     </div>
 
                     <div class="nav-wrapper">
