@@ -220,10 +220,11 @@ nav a:hover::after {
 }
 
 .search-icon {
-    width: 18px;
-    height: 18px;
+    font-size: 1.1rem; /* Adjust as needed */
     opacity: 0.6;
     cursor: pointer;
+    border: none; /* Remove border */
+    background: transparent; /* Ensure background is transparent if button has one */
 }
 
 .btn-login {
@@ -243,6 +244,7 @@ nav a:hover::after {
     background: var(--accent-yellow);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(11, 107, 83, 0.2);
+    color: #01264C;
 }
 
 .btn-login:focus-visible {
@@ -308,7 +310,158 @@ nav a:hover::after {
     }
 }
 
-/* --- Hero Section (Beautiful News Style) --- */
+/* --- Site Intro Section --- */
+.site-intro-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-search);
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 2rem; /* Add gap for spacing when wrapped */
+}
+
+.site-intro-text {
+    flex: 2; /* Allow text to take up more space */
+    min-width: 300px; /* Prevent text from becoming too squished */
+}
+
+.site-intro-text h1 {
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    margin-bottom: 0.5rem;
+}
+
+.site-intro-text .tagline {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+}
+
+.credibility-stats {
+    display: flex;
+    gap: 3rem; /* Space between stats */
+    flex: 1; /* Allow stats to take available space */
+    justify-content: flex-end; /* Align stats to the right */
+    min-width: 250px; /* Prevent stats from becoming too squished */
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+}
+
+.stat-item .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .site-intro-section {
+        flex-direction: column; /* Stack vertically on small screens */
+        text-align: center; /* Center text */
+    }
+    .credibility-stats {
+        justify-content: center; /* Center stats */
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+}
+
+/* --- Hero Section Styles --- */
+.hero-section {
+    padding-top: 4rem; /* Increased padding */
+    padding-bottom: 4rem; /* Increased padding */
+    /* Optional: Add background or border here if needed for the whole section */
+}
+
+.hero-card {
+    display: flex; /* Make it a flex container */
+    flex-direction: row; /* Arrange children horizontally */
+    gap: 2rem; /* Space between image and content */
+    background: var(--bg-surface); /* Add background for the card */
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* More prominent shadow for hero */
+    padding: 2rem; /* Add padding to the card */
+    text-decoration: none; /* Remove underline from the entire card link */
+    color: inherit; /* Inherit color for text inside */
+    align-items: center; /* Vertically align items in the middle */
+}
+
+.hero-card:hover {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15); /* Even more prominent hover shadow */
+    transform: translateY(-5px);
+}
+
+.hero-card .card-image {
+    flex: 0 0 45%; /* Image takes 45% width, fixed size */
+    max-width: 500px; /* Max width for the image */
+    height: auto;
+    aspect-ratio: 16 / 9; /* Maintain a widescreen aspect ratio for the image */
+    overflow: hidden;
+    border-radius: 6px; /* Slightly rounded corners for the image */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow for the image */
+}
+
+.hero-card .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-card .card-content {
+    flex: 1; /* Content takes remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    padding: 0; /* Remove padding here, it's on the parent hero-card now */
+}
+
+.hero-card .card-content .article-tags {
+    margin-bottom: 1rem;
+}
+
+.hero-card .card-content h3 {
+    font-size: clamp(1.8rem, 3vw, 2.5rem); /* Make title larger */
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary); /* Ensure title color is primary */
+}
+
+.hero-card .card-content .article-meta {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments for hero card */
+@media (max-width: 992px) {
+    .hero-card {
+        flex-direction: column; /* Stack image and content vertically on smaller screens */
+        padding: 1.5rem;
+    }
+    .hero-card .card-image {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: none;
+        margin-bottom: 1.5rem;
+    }
+    .hero-card .card-content {
+        padding: 0;
+    }
+}
+
 .hero {
     background: var(--bg-surface);
     padding: 5rem 0; /* Increase vertical padding too */
@@ -410,6 +563,7 @@ nav a:hover::after {
 .btn-read-more:hover {
     background: var(--accent-yellow);
     transform: translateX(4px);
+    color: #01264C;
 }
 
 .btn-read-more:focus-visible {
@@ -471,6 +625,125 @@ nav a:hover::after {
     gap: 2rem;
     margin-bottom: 4rem;
 }
+
+/* --- New Homepage Layout --- */
+.top-stories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.home-layout {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 3rem;
+}
+
+.main-content-col {
+    /* No specific styles needed, it's a container */
+}
+
+.sidebar-col {
+    /* No specific styles needed, it's a container */
+}
+
+.article-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Responsive grid */
+    gap: 2rem;
+}
+
+.article-card-horizontal {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    aspect-ratio: 1 / 1; /* Make the entire card square */
+}
+
+.article-card-horizontal:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    transform: translateY(-4px);
+}
+
+.article-card-horizontal .card-image {
+    width: 100%;
+    flex: 0 0 50%; /* Image takes 50% of the card's height, doesn't grow or shrink */
+    overflow: hidden;
+}
+
+.article-card-horizontal .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area without distorting aspect ratio */
+}
+
+.article-card-horizontal .card-content {
+    padding: 1.5rem;
+    flex: 1 1 auto; /* Content takes remaining space, can grow and shrink */
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.sidebar-widget {
+    background: var(--bg-surface);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    margin-bottom: 2rem;
+}
+
+.widget-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 0.5rem;
+}
+
+.popular-articles-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.popular-articles-list li {
+    margin-bottom: 1rem;
+    border-bottom: 1px dashed var(--border-light);
+    padding-bottom: 1rem;
+}
+
+.popular-articles-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.popular-articles-list a {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    text-decoration: none;
+}
+
+.popular-rank {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    opacity: 0.5;
+}
+
+.popular-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
 
 .article-card {
     background: var(--bg-surface);
@@ -817,6 +1090,7 @@ footer {
     background: var(--accent-yellow);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(11, 107, 83, 0.2);
+    color: #01264C;
 }
 
 .admin-container {
@@ -893,6 +1167,7 @@ footer {
 
 .btn-edit:hover {
     background-color: var(--accent-yellow);
+    color: #01264C;
 }
 
 .btn-delete {
@@ -1344,6 +1619,9 @@ footer {
     border: 1px solid rgba(168, 85, 247, 0.25);
 }
 
+
+
+
 .tag-volunteering-cas {
     background: rgba(244, 114, 182, 0.12);
 
@@ -1351,3 +1629,305 @@ footer {
 
     border: 1px solid rgba(244, 114, 182, 0.25);
 }
+
+/* --- New Footer Styles --- */
+footer {
+    background: var(--bg-search);
+    border-top: 1px solid var(--border-light);
+    padding: 3rem 0;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.footer-section a:hover {
+    color: var(--accent-yellow);
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.newsletter-form input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: var(--font-sans);
+    background-color: var(--bg-primary);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--border-light);
+    padding-top: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* --- New Homepage Redesign --- */
+.new-hero {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: var(--bg-surface);
+    border-radius: 8px;
+    margin-bottom: 1rem; /* Reduced margin */
+    border: 1px solid var(--border-light);
+}
+
+.new-hero h1 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: 0.5rem;
+}
+
+.new-hero .tagline {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.featured-articles {
+    margin-bottom: 3rem;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.featured-card {
+    background: var(--bg-surface);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid var(--border-light);
+    text-decoration: none;
+}
+
+.featured-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+}
+
+.featured-card .card-content {
+    padding: 1rem;
+}
+
+.credibility-section {
+    background: var(--bg-search);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 3rem;
+}
+
+.credibility-stats {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-item .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+}
+
+.stat-item .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.category-browser {
+    margin-bottom: 3rem;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.category-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+    text-decoration: none;
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+}
+
+.category-card:hover {
+    background: var(--bg-search);
+    transform: translateY(-3px);
+}
+
+.category-icon {
+    font-size: 2rem;
+    display: block;
+    /* Removed margin-bottom: 0.5rem; */
+}
+
+.category-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.cta-section {
+    margin-bottom: 3rem;
+}
+
+.cta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.cta-card {
+    background: var(--bg-search);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.cta-card h3 {
+    margin-bottom: 0.5rem;
+}
+
+.cta-card p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.btn-cta {
+    background: var(--accent-blue);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-cta:hover {
+    background: var(--accent-yellow);
+    color: var(--text-primary);
+}
+
+.about-snippet {
+    background: var(--bg-surface);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.about-snippet h2 {
+    margin-bottom: 1rem;
+}
+
+
+
+.article-card-horizontal .card-excerpt { display: none; }
+
+/* --- Dropdown Menu --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: var(--bg-surface);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    list-style: none;
+    padding: 0.5rem 0;
+    border-radius: 8px;
+}
+
+.dropdown-menu li a {
+    color: var(--text-primary);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-weight: 400;
+}
+
+.dropdown-menu li a:hover {
+    background-color: var(--bg-search);
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+.filter-text-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: var(--font-sans);
+    background-color: var(--bg-primary);
+    transition: var(--transition);
+    margin-top: 0.5rem; /* Add some space below the label */
+}
+
+.filter-text-input:focus {
+    outline: none;
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 0 3px rgba(11, 107, 83, 0.1);
+}
+

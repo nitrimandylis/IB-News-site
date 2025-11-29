@@ -13,10 +13,15 @@
         <!-- Filters Sidebar -->
         <aside class="filters-sidebar">
             <form method="get" action="{{ url_for('search') }}">
-                <input type="hidden" name="query" value="{{ query }}">
                 <div class="filters-header">
                     <h2 class="filters-title">Filters</h2>
-                    <a href="{{ url_for('search', query=query) }}" class="clear-filters">Clear all</a>
+                    <a href="{{ url_for('search') }}" class="clear-filters">Clear all</a>
+                </div>
+
+                <!-- Search within Filters -->
+                <div class="filter-section">
+                    <label class="filter-label" for="filter-query">Search within results</label>
+                    <input type="text" name="query" id="filter-query" value="{{ query }}" placeholder="Keywords..." aria-label="Search within results" class="filter-text-input">
                 </div>
 
                 <!-- Tags Filter -->
