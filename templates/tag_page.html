@@ -1,0 +1,96 @@
+{% extends "base.html" %} {% block title %}Articles tagged with "{{ tag_name
+}}"{% endblock %} {% block content %}
+<div class="container">
+    <div class="tag-page-header">
+        <h1>{{ tag_name }}</h1>
+    </div>
+
+    <section class="articles-section">
+        <div class="article-list">
+            {% for article in articles %}
+            <a
+                href="{{ url_for('article', article_id=article.id) }}"
+                class="article-card-horizontal"
+            >
+                <div class="card-image">
+                    {% if article.has_image %}
+                    <img
+                        src="{{ url_for('get_image', article_id=article.id) }}"
+                        alt="{{ article.title }}"
+                    />
+                    {% elif article.image_url %}
+                    <img
+                        src="{{ article.image_url }}"
+                        alt="{{ article.title }}"
+                    />
+                    {% else %}
+                    <div
+                        style="
+                            background: linear-gradient(
+                                135deg,
+                                #edeae4 0%,
+                                #e0ddd5 100%
+                            );
+                            width: 100%;
+                            height: 100%;
+                        "
+                    ></div>
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    {% if article.tags %}
+                    <div>
+                        {% for tag in article.tags %}
+                        <span class="category-tag {{ tag|get_tag_class }}"
+                            >{{ tag }}</span
+                        >
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <h3>{{ article.title }}</h3>
+                    <p class="card-meta">
+                        By {{ article.author }} | {{
+                        article.created_at.strftime('%B %d, %Y') }}
+                    </p>
+                    <p class="card-excerpt">
+                        {{ article.content | striptags | truncate(150) }}
+                    </p>
+                </div>
+            </a>
+            {% else %}
+            <p>No articles found for this tag.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        {% if page > 1 %}
+        <a
+            href="{{ url_for('tag_page', tag_name=tag_name, page=page-1) }}"
+            class="pagination-btn"
+            >Previous</a
+        >
+        {% else %}
+        <span class="pagination-btn disabled">Previous</span>
+        {% endif %} {% for p in range(1, total_pages + 1) %} {% if p == page %}
+        <span class="pagination-btn active">{{ p }}</span>
+        {% else %}
+        <a
+            href="{{ url_for('tag_page', tag_name=tag_name, page=p) }}"
+            class="pagination-btn"
+            >{{ p }}</a
+        >
+        {% endif %} {% endfor %} {% if page < total_pages %}
+        <a
+            href="{{ url_for('tag_page', tag_name=tag_name, page=page+1) }}"
+            class="pagination-btn"
+            >Next</a
+        >
+        {% else %}
+        <span class="pagination-btn disabled">Next</span>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

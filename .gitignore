@@ -19,6 +19,7 @@ instance/
 # IDE / Editor specific
 .vscode/
 .idea/
+.github/
 .gemini/
 
 

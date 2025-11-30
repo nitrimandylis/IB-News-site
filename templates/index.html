@@ -1,77 +1,144 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container">
-    <!-- Hero Section -->
-    {% if hero_article %}
-    <section class="hero" aria-label="Featured story">
-        <div class="hero-content">
-            <div class="hero-image">
-                {% if hero_article.has_image %}
-                    <img src="{{ url_for('get_image', article_id=hero_article.id) }}" alt="{{ hero_article.title }}">
-                {% elif hero_article.image_url %}
-                    <img src="{{ hero_article.image_url }}" alt="{{ hero_article.title }}">
-                {% else %}
-                <div style="background: linear-gradient(135deg, #4A6378 0%, #0B6B53 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                    <span style="color: rgba(255,255,255,0.3); font-size: 2rem;">Featured Image</span>
-                </div>
-                {% endif %}
+    <!-- Site Intro Section -->
+    <section class="site-intro-section">
+        <div class="site-intro-text">
+            <h1>By Students, For Students</h1>
+            <p class="tagline">
+                The independent voice of the CGS student body, covering stories
+                that matter.
+            </p>
+        </div>
+        <div class="credibility-stats">
+            <div class="stat-item">
+                <span class="stat-number">{{ author_count }}</span>
+                <span class="stat-label">Student Writers</span>
             </div>
-            <div class="hero-body">
-                {% if hero_article.tags %}
-                <div>
-                    {% for tag in hero_article.tags %}
-                        <span class="category-tag {{ tag|get_tag_class }}">{{ tag }}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                <h1>{{ hero_article.title }}</h1>
-                <p class="article-meta">By {{ hero_article.author }} | {{ hero_article.created_at.strftime('%B %d, %Y') }}</p>
-                <p class="hero-excerpt">{{ hero_article.content | striptags | truncate(200) }}</p>
-                <a href="{{ url_for('article', article_id=hero_article.id) }}" class="btn-read-more">Read Full Story <span>→</span></a>
+            <div class="stat-item">
+                <span class="stat-number">{{ article_count }}</span>
+                <span class="stat-label">Stories Published</span>
             </div>
         </div>
     </section>
-    {% endif %}
 
-    <!-- Section Navigation -->
-    <nav class="section-nav" aria-label="Article sections">
-        <a href="{{ url_for('index') }}" class="{% if not selected_tag %}active{% endif %}">All Stories</a>
-        {% for tag in tags %}
-        <a href="{{ url_for('index', tag=tag) }}" class="{% if selected_tag == tag %}active{% endif %}">{{ tag }}</a>
-        {% endfor %}
-    </nav>
+    <!-- Category Browsing Section -->
+    <section class="category-browser">
+        <h2 class="section-title">Explore by Category</h2>
+        <div class="category-grid">
+            {% for tag in tags %}
+            <a
+                href="{{ url_for('tag_page', tag_name=tag) }}"
+                class="category-card"
+            >
+                <i class="category-icon {{ tag_icons[tag] }}"></i>
+                <span class="category-name">{{ tag }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
 
-    <!-- Latest Articles -->
+    <!-- All Stories Section -->
     <section class="articles-section">
-        <div class="article-grid">
+        <h2 class="section-title">All Stories</h2>
+        <div class="article-list">
             {% for article in articles %}
-            <a href="{{ url_for('article', article_id=article.id) }}" class="article-card">
+            <a
+                href="{{ url_for('article', article_id=article.id) }}"
+                class="article-card-horizontal"
+            >
                 <div class="card-image">
                     {% if article.has_image %}
-                        <img src="{{ url_for('get_image', article_id=article.id) }}" alt="{{ article.title }}">
+                    <img
+                        src="{{ url_for('get_image', article_id=article.id) }}"
+                        alt="{{ article.title }}"
+                    />
                     {% elif article.image_url %}
-                        <img src="{{ article.image_url }}" alt="{{ article.title }}">
+                    <img
+                        src="{{ article.image_url }}"
+                        alt="{{ article.title }}"
+                    />
                     {% else %}
-                        <div style="background: linear-gradient(135deg, #EDEAE4 0%, #E0DDD5 100%); width: 100%; height: 100%;"></div>
+                    <div
+                        style="
+                            background: linear-gradient(
+                                135deg,
+                                #edeae4 0%,
+                                #e0ddd5 100%
+                            );
+                            width: 100%;
+                            height: 100%;
+                        "
+                    ></div>
                     {% endif %}
                 </div>
                 <div class="card-content">
                     {% if article.tags %}
                     <div>
                         {% for tag in article.tags %}
-                                <span class="category-tag {{ tag|get_tag_class }}">{{ tag }}</span>
+                        <span class="category-tag {{ tag|get_tag_class }}"
+                            >{{ tag }}</span
+                        >
                         {% endfor %}
                     </div>
                     {% endif %}
                     <h3>{{ article.title }}</h3>
-                    <p class="card-meta">By {{ article.author }} | {{ article.created_at.strftime('%B %d, %Y') }}</p>
+                    <p class="card-meta">
+                        By {{ article.author }} | {{
+                        article.created_at.strftime('%B %d, %Y') }}
+                    </p>
+                    <p class="card-excerpt">
+                        {{ article.content | striptags | truncate(150) }}
+                    </p>
                 </div>
             </a>
             {% else %}
-                <p>No articles found. Check back later!</p>
+            <p>No articles found for this category.</p>
             {% endfor %}
         </div>
+    </section>
+
+    {% if total_pages > 1 %}
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="{{ url_for('index', page=page-1, selected_tag=selected_tag) }}" class="pagination-btn">Previous</a>
+        {% else %}
+        <span class="pagination-btn disabled">Previous</span>
+        {% endif %}
+
+        {% for p in range(1, total_pages + 1) %}
+            {% if p == page %}
+            <span class="pagination-btn active">{{ p }}</span>
+            {% else %}
+            <a href="{{ url_for('index', page=p, selected_tag=selected_tag) }}" class="pagination-btn">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+        <a href="{{ url_for('index', page=page+1, selected_tag=selected_tag) }}" class="pagination-btn">Next</a>
+        {% else %}
+        <span class="pagination-btn disabled">Next</span>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Call-to-Action Section -->
+    <section class="cta-section">
+        <div class = "cta-grid">
+            <div class="cta-card">
+                <h3><i class="fa-solid fa-lightbulb"></i> Submit a Tip</h3>
+                <p>
+                    Got a story lead? Share it with our editors confidentially.
+                </p>
+                <a href="{{ url_for('submit') }}" class="btn-cta">Share Now</a>
+            </div>
+            <div class="cta-card">
+                <h3><i class="fa-solid fa-pen-to-square"></i> Write for Us</h3>
+                <p>
+                    Passionate about journalism? Join our team and make your
+                    voice heard.
+                </p>
+                <a href="{{ url_for('submit') }}" class="btn-cta">Join the Team</a>
+            </div>
     </section>
 </div>
 {% endblock %}
