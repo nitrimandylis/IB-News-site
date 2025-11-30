@@ -52,7 +52,7 @@ def inject_all_tags():
     # Font Awesome icon mappings (lowercase keys)
     tag_icons = {
         "ad": "fa-solid fa-money-bill-wave",
-        "business": "fa-solid fa-fa-briefcase",
+        "business": "fa-solid fa-briefcase",
         "for-the-student": "fa-solid fa-graduation-cap",
         "arts": "fa-solid fa-paint-brush",
         "opinion": "fa-solid fa-comments",
@@ -68,6 +68,7 @@ def inject_all_tags():
     for tag in all_tags:
         # Normalize the tag name for lookup: lowercase and replace spaces with hyphens
         normalized_tag = tag.lower().replace(' ', '-')
+        app.logger.debug(f"Processing tag: '{tag}' -> Normalized: '{normalized_tag}'") # Diagnostic log
         final_tag_icons[tag] = tag_icons.get(normalized_tag, default_icon)
 
     return {'all_tags_for_nav': all_tags, 'tag_icons': final_tag_icons}
@@ -387,7 +388,18 @@ def tag_page(tag_name):
         return "Database not available", 503
     cur = conn.cursor()
 
-    # Fetch articles for the given tag
+    page = request.args.get("page", 1, type=int) # Get current page, default to 1
+
+    # Base query for all articles (before pagination limits) for this tag
+    count_sql = """
+        SELECT COUNT(DISTINCT a.id)
+        FROM articles a
+        LEFT JOIN article_tags at ON a.id = at.article_id
+        LEFT JOIN tags t ON at.tag_id = t.id
+        WHERE a.id IN (SELECT article_id FROM article_tags WHERE tag_id IN (SELECT id FROM tags WHERE name = %s))
+    """
+    
+    # Base query for articles for this tag
     sql = """
         SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
                COALESCE(ARRAY_AGG(t.name), ARRAY[]::VARCHAR[])
@@ -398,7 +410,18 @@ def tag_page(tag_name):
         GROUP BY a.id
         ORDER BY a.created_at DESC
     """
-    cur.execute(sql, (tag_name,))
+    
+    # Get total articles count for pagination for this tag
+    cur.execute(count_sql, (tag_name,))
+    total_articles = cur.fetchone()[0]
+    total_pages = ceil(total_articles / ITEMS_PER_PAGE)
+
+    # Apply pagination limits
+    sql += " LIMIT %s OFFSET %s"
+    params = [tag_name, ITEMS_PER_PAGE, (page - 1) * ITEMS_PER_PAGE]
+
+
+    cur.execute(sql, tuple(params))
     articles = cur.fetchall()
     cur.close()
 
@@ -417,7 +440,13 @@ def tag_page(tag_name):
             }
         )
 
-    return render_template("tag_page.html", articles=articles_dict, tag_name=tag_name)
+    return render_template("tag_page.html", 
+                           articles=articles_dict, 
+                           tag_name=tag_name,
+                           page=page,
+                           total_pages=total_pages,
+                           items_per_page=ITEMS_PER_PAGE,
+                           total_articles=total_articles)
 
 
 @app.route('/submit', methods=['GET', 'POST'])

@@ -39,12 +39,3 @@ else:
 conn.commit()
 cur.close()
 conn.close()
-
-print("Database initialization check complete.")
-
-# Commit the changes and close the connection
-conn.commit()
-cur.close()
-conn.close()
-
-print("Database initialization check complete.")

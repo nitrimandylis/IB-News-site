@@ -103,6 +103,17 @@
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </form>
+                            {% if current_user.is_authenticated %}
+                            <a
+                                href="{{ url_for('admin') }}"
+                                class="btn-login"
+                                aria-label="Go to admin panel"
+                                >Admin</a
+                            >
+                            {% endif %}
+                        </div>
+                    </div>
+
                     <button
                         class="hamburger"
                         aria-label="Toggle menu"

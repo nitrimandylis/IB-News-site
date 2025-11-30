@@ -1377,7 +1377,7 @@ footer {
 .about-page {
     padding-top: 3rem;
     padding-bottom: 3rem;
-    max-width: 900px;
+    max-width: 1400px; /* Increased to match .container width */
 }
 
 .about-header {
@@ -2286,4 +2286,6 @@ footer {
         text-align: center;
     }
 }
+
+
 
