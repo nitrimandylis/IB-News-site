@@ -124,7 +124,7 @@ ITEMS_PER_PAGE = 9 # Define constant
 def index():
     conn = get_db()
     if conn is None:
-        return render_template("index.html", articles=[], tags=[])
+        return render_template("index.html", articles=[], tags=[], total_pages=0, page=1)
 
     cur = conn.cursor()
 
@@ -142,7 +142,7 @@ def index():
         LEFT JOIN article_tags at ON a.id = at.article_id
         LEFT JOIN tags t ON at.tag_id = t.id
     """
-    
+
     # Base query for articles
     sql = """
         SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
@@ -163,7 +163,7 @@ def index():
         count_sql += " WHERE " + " AND ".join(where_clauses)
 
     sql += " GROUP BY a.id ORDER BY a.created_at DESC"
-    
+
     # Get total articles count for pagination
     cur.execute(count_sql, tuple(params))
     total_articles = cur.fetchone()[0]
@@ -204,7 +204,7 @@ def index():
     return render_template(
         "index.html",
         hero_article=hero_article,
-        # top_articles=top_articles_dict, 
+        # top_articles=top_articles_dict,
         articles=articles_dict, # This now contains only the paginated articles
         tags=all_tags,
         selected_tag=selected_tag,
@@ -398,7 +398,7 @@ def tag_page(tag_name):
         LEFT JOIN tags t ON at.tag_id = t.id
         WHERE a.id IN (SELECT article_id FROM article_tags WHERE tag_id IN (SELECT id FROM tags WHERE name = %s))
     """
-    
+
     # Base query for articles for this tag
     sql = """
         SELECT a.id, a.title, a.author, a.content, a.image_url, a.created_at, a.image_data IS NOT NULL,
@@ -410,7 +410,7 @@ def tag_page(tag_name):
         GROUP BY a.id
         ORDER BY a.created_at DESC
     """
-    
+
     # Get total articles count for pagination for this tag
     cur.execute(count_sql, (tag_name,))
     total_articles = cur.fetchone()[0]
@@ -440,8 +440,8 @@ def tag_page(tag_name):
             }
         )
 
-    return render_template("tag_page.html", 
-                           articles=articles_dict, 
+    return render_template("tag_page.html",
+                           articles=articles_dict,
                            tag_name=tag_name,
                            page=page,
                            total_pages=total_pages,
@@ -468,7 +468,7 @@ def submit():
             app.logger.info(f"  File: {file.filename} ({file.content_type})")
         else:
             app.logger.info(f"  File: None")
-        
+
         # Here you would typically save to a database, send an email, etc.
         # For now, we just flash a success message.
         flash('Your submission has been received! Thank you.', 'success')
@@ -731,4 +731,4 @@ def edit_article(article_id):
 # --- Main Execution ---
 
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    app.run(port=5002, debug=True)
