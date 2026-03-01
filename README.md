@@ -1,37 +1,59 @@
-# CGS IB News 📰
+<p align="center">
+  <img src="static/Gazette.svg" alt="CGS IB Gazette" width="300"/>
+</p>
 
-**A modern digital newspaper for the IBDP student community of my school**
+<p align="center">
+  <strong>CGS IB Gazette</strong><br>
+  The student-run digital newspaper project
+</p>
 
----
 
-## 🎯 About
+## Overview
 
-CGS IB News is a student-run digital newspaper showcasing journalism, creative writing, and thought leadership from the International Baccalaureate community. Built with elegant broadsheet-style design principles, the platform delivers quality content across Business, Computer Science, Student Life, and CAS initiatives.
-
----
+A full-stack Flask web application powering the CGS IB Gazette — the school's
+student newspaper. Features article publishing, an admin dashboard, category
+filtering, and a PostgreSQL-backed content management system.
 
 ## ✨ Features
 
-### 📝 Content Management
+### Content Management
 - **Multi-Category System** – Organized by Student Life, Student Projects, Volunteering/CAS, Business, and Technology
 - **Submission Portal** – Open contribution system for student writers
 - **Admin Dashboard** – Content moderation and publishing workflow
 
-### 🎨 Design
+### Design
 - **Elegant Typography** – EB Garamond headlines + Source Sans Pro body text
 - **Responsive Layout** – Optimized for desktop, tablet, and mobile
 - **Color Palette** – Warm cream tones (#F9F6F0, #EFEBE0) with editorial accents
 - **Tag System** – Visual categorization with color-coded badges
 
-### 📬 Newsletter
-- Weekly digest of top stories
-- Email subscription system
-- Curated content directly to your inbox
 
----
+## Tech Stack
 
-## 🛠️ Tech Stack
+| Layer | Technology |
+|---|---|
+| Backend | Flask · Gunicorn |
+| Database | PostgreSQL · psycopg2 |
+| Auth | Flask-HTTPAuth · python-dotenv |
+| Frontend | HTML · CSS · JavaScript |
+| Schema | schema.sql · init_db.py |
 
-- **Frontend:** HTML, CSS, JavaScript
-- **Version Control:** Git/GitHub
-- **Design Philosophy:** Broadsheet-inspired with Beautiful News aesthetics
+## Project Structure
+
+```
+IB-News-site/
+├── server.py          # Main Flask application
+├── init_db.py         # Database initialisation script
+├── schema.sql         # SQL schema
+├── requirements.txt
+├── static/
+│   ├── Gazette.svg    # Logo
+│   ├── style.css
+│   └── script.js
+└── templates/         # Jinja2 HTML templates
+```
+
+## License
+
+GNU Affero General Public License v3.0 — see [LICENSE](LICENSE) for details.
+Any fork hosted as a network service must also be open source.
