@@ -25,6 +25,12 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+# Let the CDN cache /static instead of booting the function for every asset.
+# Only static files: the HTML varies on session (see inject_current_user).
+# 5 minutes, not a day: url_for('static', ...) has no version hash, so this is
+# how long a returning reader can keep stale CSS after a deploy.
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 300
+
 
 @app.context_processor
 def inject_now():
