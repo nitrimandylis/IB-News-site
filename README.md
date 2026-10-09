@@ -14,6 +14,8 @@
 
 </div>
 
+[![the gazette front page: 11 student writers, 0 stories published. the deadline was yesterday](.github/assets/screenshot.jpg)](https://ib-news-site.vercel.app)
+
 ---
 
 ## 🗞️ What is this
